@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Xpay Utils</string>
+    <string name="alesky_hacky">Alesky Hacky</string>
+    <string name="bio">Hi, my name is Aleks. \n\nI love fish. \n\nThe kind that is alive and swims around in an aquarium or river, or a lake, and definitely the ocean. \nFun fact is that I have several aquariums and also a river. \n\nI like eating fish, too. Raw fish. Grilled fish. Smoked fish. Poached fish - not so much. \nAnd sometimes I even go fishing. \nAnd even less sometimes, I actually catch something. \n\nOnce, when I was camping in Canada, and very hungry, I even caught a large salmon with my hands. \n\nI\'ll be happy to teach you how to make your own aquarium. \nYou should ask someone else about fishing, though.\n\n</string>
+    <string name="what_is_your_nickname">What is your Nickname?</string>
+    <string name="box_one">Box One</string>
+    <string name="box_two">Box Two</string>
+    <string name="box_three">Box Three</string>
+    <string name="box_four">Box Four</string>
+    <string name="box_five">Box Five</string>
+    <string name="api_key">f847375eb07a48a5568c92c08f10dfcc</string>
+    <string name="how_to_play">How to play:</string>
+    <string name="tap_the_boxes_and_buttons">Tap the screen and buttons.</string>
+    <string name="button_red">RED</string>
+    <string name="button_yellow">YELLOW</string>
+    <string name="button_green">GREEN</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+</resources>
