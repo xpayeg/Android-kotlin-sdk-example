@@ -26,8 +26,8 @@ import kotlinx.android.synthetic.main.activity_movie.*
 
 
 class Login : AppCompatActivity() {
-    var dialog: AlertDialog? =null
-    var sharedPreferences: SharedPreferences?=null
+    var dialog: AlertDialog? = null
+    var sharedPreferences: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         XpayUtils.apiKey = "3uBD5mrj.3HSCm46V7xJ5yfIkPb2gBOIUFH4Ks0Ss"
@@ -37,19 +37,25 @@ class Login : AppCompatActivity() {
         XpayUtils.variableAmountID = 18
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-         sharedPreferences =
+        sharedPreferences =
             this.getSharedPreferences("save", Context.MODE_PRIVATE)
 
 //        editor.putBoolean("active",true).apply()
 //        val dialog = setProgressDialog(this, "Loading..")
 //        dialog.show()
-        dialog= SpotsDialog.Builder().setContext(this@Login).build()
+        dialog = SpotsDialog.Builder().setContext(this@Login).build()
 
         btnLogin.setOnClickListener {
 
-           val num: Number = userAmount.text.toString().toDouble()
-            dialog?.show()
-            XpayUtils.prepareAmount(num, XpayUtils.communityId!!,::userSuccess,::userFailure)
+            var num: Number? =null
+
+            if (userAmount.text.toString().isNotEmpty()) {
+                num=userAmount.text.toString().toDouble()
+                dialog?.show()
+                XpayUtils.prepareAmount(num, XpayUtils.communityId!!, ::userSuccess, ::userFailure)
+            } else {
+                userAmount.setError("Enter Valid Amount")
+            }
 //            Handler().postDelayed({
 //                dialog.dismiss()
 //
@@ -62,7 +68,7 @@ class Login : AppCompatActivity() {
         val editor: SharedPreferences.Editor = sharedPreferences!!.edit()
         dialog?.dismiss()
         Toast.makeText(this, res.data.total_amount.toString(), Toast.LENGTH_LONG).show()
-        XpayUtils.amount=userAmount.text.toString().toDouble()
+        XpayUtils.amount = userAmount.text.toString().toDouble()
         startActivity(Intent(this, UserActivity::class.java))
 //        editor.putFloat("amount",userAmount.text.toString().toFloat()).apply()
 

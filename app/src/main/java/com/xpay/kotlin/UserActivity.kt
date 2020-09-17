@@ -20,8 +20,19 @@ class UserActivity : AppCompatActivity() {
             val email: String = userEmail.text.toString()
             val phone = "${userPhone.text}"
 
-                XpayUtils.user = User(fullName, email, phone)
+            if(fullName.isNotEmpty() && email.isNotEmpty() && phone.isNotEmpty()){
                 startActivity(Intent(this, MainActivity::class.java))
+                XpayUtils.user = User(fullName, email, phone)
+            }else{
+                if(fullName.isEmpty())
+                    userName2.setError("Enter valid Full Name")
+                if(email.isEmpty())
+                    userEmail.setError("Enter valid Email")
+                if(phone.isEmpty())
+                    userPhone.setError("Enter valid Phone Number")
+            }
+
+
 //                Toast.makeText(this,"EError",Toast.LENGTH_LONG)
         }
     }

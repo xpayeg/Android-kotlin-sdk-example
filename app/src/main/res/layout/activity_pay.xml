@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#7F7F7F"
     tools:context=".PayActivity">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -14,8 +15,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:clickable="true"
-        app:fabCustomSize="35dp"
+        android:visibility="gone"
         app:backgroundTint="#FFFFFF"
+        app:fabCustomSize="35dp"
         app:layout_constraintEnd_toEndOf="@+id/webView2"
         app:layout_constraintTop_toTopOf="@+id/webView2"
         app:srcCompat="@drawable/ic_baseline_clear_24" />
