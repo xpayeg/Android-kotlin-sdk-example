@@ -20,23 +20,25 @@ class UserActivity : AppCompatActivity() {
             val email: String = userEmail.text.toString()
             val phone = "${userPhone.text}"
 
-            if(fullName.isNotEmpty() && email.isNotEmpty() && phone.isNotEmpty()){
-                startActivity(Intent(this, MainActivity::class.java))
+            if (fullName.isNotEmpty() && email.isEmailValid() && phone.length == 11) {
+                val intent = Intent(this, MainActivity::class.java)
+                Toast.makeText(this, getIntent().getStringExtra("AMOUNT"), Toast.LENGTH_LONG).show()
+                intent.putExtra("TOTAL_AMOUNT", getIntent().getStringExtra("AMOUNT"))
+                startActivity(intent)
                 XpayUtils.user = User(fullName, email, phone)
-            }else{
-                if(fullName.isEmpty())
+            } else {
+                if (fullName.isEmpty())
                     userName2.setError("Enter valid Full Name")
-                if(email.isEmpty())
+                if (!email.isEmailValid())
                     userEmail.setError("Enter valid Email")
-                if(phone.isEmpty())
+                if (phone.isEmpty() || phone.length < 11)
                     userPhone.setError("Enter valid Phone Number")
             }
-
-
-//                Toast.makeText(this,"EError",Toast.LENGTH_LONG)
         }
     }
-    fun String.isEmailValid(): Boolean {
-        return !TextUtils.isEmpty(this) && android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
+
+    private fun String.isEmailValid(): Boolean {
+        return !TextUtils.isEmpty(this) && android.util.Patterns.EMAIL_ADDRESS.matcher(this)
+            .matches()
     }
 }

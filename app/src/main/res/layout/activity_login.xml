@@ -32,6 +32,7 @@
         android:maxLength="6"
         android:hint="Enter Amount"
         android:padding="12dp"
+        android:imeOptions="actionDone"
         android:background="@drawable/background_border"
         android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"

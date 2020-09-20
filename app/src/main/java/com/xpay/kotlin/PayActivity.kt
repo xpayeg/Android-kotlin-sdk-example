@@ -24,25 +24,27 @@ class PayActivity : AppCompatActivity() {
         dialog = SpotsDialog.Builder().setContext(this).build()
         dialog?.show()
         webView2.loadUrl(XpayUtils.iframeUrl)
-        webView2.setWebViewClient(object : WebViewClient() {
+        webView2.webViewClient = object : WebViewClient() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
 
             }
+
             override fun onPageFinished(view: WebView, url: String) {
                 showHide(fab)
                 dialog?.hide()
             }
-        })
+        }
         fab.setOnClickListener {
             val intent = Intent(this, Login::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(intent)
         }
     }
-    fun showHide(view:View) {
-        view.visibility = if (view.visibility == View.GONE){
+
+    fun showHide(view: View) {
+        view.visibility = if (view.visibility == View.GONE) {
             View.VISIBLE
-        } else{
+        } else {
             View.VISIBLE
         }
     }

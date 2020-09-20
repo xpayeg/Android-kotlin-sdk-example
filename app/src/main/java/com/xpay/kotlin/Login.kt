@@ -4,25 +4,13 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
-import android.view.Gravity
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.xpay.kotlin.models.PayResponse
 import com.xpay.kotlin.models.PrepareAmount
-import com.xpay.kotlin.models.User
 import com.xpay.kotlinutils.XpayUtils
 import dmax.dialog.SpotsDialog
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_movie.*
 
 
 class Login : AppCompatActivity() {
@@ -40,9 +28,6 @@ class Login : AppCompatActivity() {
         sharedPreferences =
             this.getSharedPreferences("save", Context.MODE_PRIVATE)
 
-//        editor.putBoolean("active",true).apply()
-//        val dialog = setProgressDialog(this, "Loading..")
-//        dialog.show()
         dialog = SpotsDialog.Builder().setContext(this@Login).build()
 
         btnLogin.setOnClickListener {
@@ -52,25 +37,19 @@ class Login : AppCompatActivity() {
             if (userAmount.text.toString().isNotEmpty()) {
                 num=userAmount.text.toString().toDouble()
                 dialog?.show()
-                XpayUtils.prepareAmount(num, XpayUtils.communityId!!, ::userSuccess, ::userFailure)
+                XpayUtils.prepareAmount(XpayUtils.apiKey!!,num, XpayUtils.communityId!!, ::userSuccess, ::userFailure)
             } else {
                 userAmount.setError("Enter Valid Amount")
             }
-//            Handler().postDelayed({
-//                dialog.dismiss()
-//
-//            }, 2000);
-
         }
     }
 
     fun userSuccess(res: PrepareAmount) {
-        val editor: SharedPreferences.Editor = sharedPreferences!!.edit()
         dialog?.dismiss()
-        Toast.makeText(this, res.data.total_amount.toString(), Toast.LENGTH_LONG).show()
-        XpayUtils.amount = userAmount.text.toString().toDouble()
-        startActivity(Intent(this, UserActivity::class.java))
-//        editor.putFloat("amount",userAmount.text.toString().toFloat()).apply()
+        val amount:String = res.data.total_amount.toString()
+        val intent = Intent(this, UserActivity::class.java)
+        intent.putExtra("AMOUNT", amount)
+        startActivity(intent)
 
     }
 
