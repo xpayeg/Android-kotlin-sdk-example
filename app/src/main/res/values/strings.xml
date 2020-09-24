@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Sdk</string>
+    <string-array name="paymentMethods">
+        <item>CARD</item>
+        <item>KIOSK</item>
+        <item>CASH</item>
+    </string-array>
 </resources>
