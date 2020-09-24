@@ -26,11 +26,6 @@
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="18dp"
             android:backgroundTint="@color/colorPrimary"
             android:fontFamily="@font/roboto"
             android:gravity="center"
@@ -50,8 +45,11 @@
             android:layout_marginStart="17dp"
             android:layout_marginLeft="17dp"
             android:layout_marginTop="19dp"
+            android:fontFamily="@font/roboto"
             android:text="Mahmoud Aziz"
-            android:textSize="24dp"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -61,35 +59,44 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="17dp"
             android:layout_marginLeft="17dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/roboto"
             android:text="mvnv@ffsfd.36"
-            android:textSize="24dp"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textName" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/txtPhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="17dp"
             android:layout_marginLeft="17dp"
-            android:layout_marginTop="19dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/roboto"
             android:text="121448 EGP"
-            android:textSize="24dp"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textEmail" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/txtCommunity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="19dp"
             android:layout_marginLeft="19dp"
-            android:layout_marginTop="26dp"
-            android:text="fdfdsgt"
-            android:textSize="24dp"
+            android:layout_marginTop="16dp"
+            android:text="community ID"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+            app:layout_constraintTop_toBottomOf="@+id/txtPhone"
+            android:fontFamily="@font/roboto" />
 
         <TextView
             android:id="@+id/textVariableID"
@@ -97,11 +104,40 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="19dp"
             android:layout_marginLeft="19dp"
-            android:layout_marginTop="19dp"
-            android:text="19"
-            android:textSize="24dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/roboto"
+            android:text="Variable id"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+            app:layout_constraintTop_toBottomOf="@+id/txtCommunity" />
+
+        <TextView
+            android:id="@+id/txtMethod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/roboto"
+            android:text="Payment Method"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/textVariableID"
+            app:layout_constraintTop_toBottomOf="@+id/textVariableID" />
+
+        <TextView
+            android:id="@+id/totalAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/roboto"
+            android:text="total amount: "
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/txtMethod"
+            app:layout_constraintTop_toBottomOf="@+id/txtMethod" />
 
         <!--        <TextView-->
 <!--            android:id="@+id/nickname_text"-->
