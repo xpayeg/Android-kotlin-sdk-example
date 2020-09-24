@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:visibility="visible"
     tools:context=".UserActivity">
 
     <EditText
@@ -55,27 +56,93 @@
         android:layout_marginRight="8dp"
         android:background="@drawable/background_border"
         android:ems="6"
-        android:maxLength="11"
         android:hint="Enter Phone Number"
-        android:inputType="phone"
-        android:padding="12dp"
         android:imeOptions="actionDone"
+        android:inputType="phone"
+        android:maxLength="11"
+        android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userEmail" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <Button
         android:id="@+id/btnSubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
-        app:backgroundTint="@color/colorPrimary"
-        app:fabCustomSize="60dp"
+        android:background="@drawable/rounded_shape"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="Confirm"
+        android:textColor="#fff"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_baseline_arrow_forward_ios_24" />
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        style="@style/Widget.AppCompat.Spinner.Underlined"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/background_border"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="@+id/userPhone"
+        app:layout_constraintStart_toStartOf="@+id/userPhone"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/roboto"
+        android:text="Select Payment Method"
+        android:textColor="#B5ADAD"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/userPhone"
+        app:layout_constraintTop_toBottomOf="@+id/userPhone" />
+
+    <TextView
+        android:id="@+id/totalAmountTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="total amount: 458 Egp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/spinner"
+        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+
+    <Button
+        android:id="@+id/btnShippingInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:paddingLeft="18dp"
+        android:paddingRight="18dp"
+        android:text="Add Shipping Info"
+        android:textColor="#000000"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/totalAmountTxt"
+        app:layout_constraintTop_toBottomOf="@+id/totalAmountTxt" />
+
+
+    <!--    <Button-->
+    <!--        android:id="@+id/btnCustomField"-->
+    <!--        style="@style/Widget.AppCompat.Button.Colored"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginBottom="10dp"-->
+    <!--        android:background="@color/colorPrimary"-->
+    <!--        android:paddingLeft="8dp"-->
+    <!--        android:paddingRight="8dp"-->
+    <!--        android:text="Add Custom Fields"-->
+    <!--        android:textSize="14sp"-->
+    <!--        app:layout_constraintBottom_toTopOf="@+id/btnSubmit"-->
+    <!--        app:layout_constraintEnd_toEndOf="@+id/btnSubmit" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
