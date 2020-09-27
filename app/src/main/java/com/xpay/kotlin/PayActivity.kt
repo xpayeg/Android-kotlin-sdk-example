@@ -3,11 +3,14 @@ package com.xpay.kotlin
 import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.xpay.kotlinutils.XpayUtils
 import dmax.dialog.SpotsDialog
 import kotlinx.android.synthetic.main.activity_main.*
@@ -21,9 +24,11 @@ class PayActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pay)
         dialog = SpotsDialog.Builder().setContext(this).build()
-        if(XpayUtils.iframeUrl!=null){
+        if (XpayUtils.iframeUrl != null) {
             dialog?.show()
             showHide(webView2)
+            showHide(btnDone)
+            constrain_status.setBackgroundColor(ContextCompat.getColor(this, R.color.dark_gray))
             webView2.loadUrl(XpayUtils.iframeUrl)
             webView2.webViewClient = object : WebViewClient() {
                 override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
@@ -35,14 +40,18 @@ class PayActivity : AppCompatActivity() {
                     dialog?.hide()
                 }
             }
-        }else{
+        } else {
+            if (XpayUtils.shippingInfo != null && XpayUtils.payUsing == "cash") {
+                txt_status.text = "Successful Payment"
+                txt_status.setTextColor(Color.parseColor("#4C9A2A"));
+            }
             val uuid = intent.getStringExtra("UUID")
             val message = intent.getStringExtra("MESSAGE")
-            txtUid.text=uuid
-            txtMsg.text=message
+            txtUid.text = uuid
+            txtMsg.text = message
         }
 
-        btnDone.setOnClickListener{
+        btnDone.setOnClickListener {
             val intent = Intent(this, Login::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(intent)
@@ -58,7 +67,7 @@ class PayActivity : AppCompatActivity() {
         view.visibility = if (view.visibility == View.GONE) {
             View.VISIBLE
         } else {
-            View.VISIBLE
+            View.GONE
         }
     }
 }

@@ -60,10 +60,11 @@ class UserActivity : AppCompatActivity() {
                 // your code here
             }
         }
-//        btnCustomField.setOnClickListener {
-//            val exampleDialog = ExampleDialog()
-//            exampleDialog.show(supportFragmentManager, "example dialog")
-//        }
+
+        btnShippingInfo.setOnClickListener {
+            val intent = Intent(this, ShippingActivity::class.java)
+            startActivity(intent)
+        }
 
 
         btnSubmit.setOnClickListener {
