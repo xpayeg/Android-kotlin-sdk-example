@@ -41,12 +41,15 @@ class Login : AppCompatActivity() {
         dialog = SpotsDialog.Builder().setContext(this@Login).build()
 
         btnLogin.setOnClickListener {
-            println(JSONArray(customFields))
             val num: Number?
             if (userAmount.text.toString().isNotEmpty()) {
                 num=userAmount.text.toString().toDouble()
-                if(txt_field_label.text.toString().isNotEmpty() && txt_field_value.text.toString().isNotEmpty() ){
-                    XpayUtils.addCustomField(txt_field_label.text.toString(),txt_field_value.text.toString())
+                if(txt_field_label.text.toString().isNotEmpty() ){
+                    XpayUtils.addCustomField("field_labe l",txt_field_label.text.toString())
+                }
+
+                if(txt_field_value.text.toString().isNotEmpty() ){
+                    XpayUtils.addCustomField("field_labe 2",txt_field_value.text.toString())
                 }
                 dialog?.show()
                 XpayUtils.prepareAmount(num, ::userSuccess, ::userFailure)
