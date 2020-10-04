@@ -7,4 +7,12 @@
     <color name="my_red">#E54304</color>
     <color name="my_yellow">#FFC107</color>
     <color name="dark_gray">#838383</color>
+
+    <!--color palete-->
+    <color name="white">#dde6ec</color>
+    <color name="blue">#7ec4ed</color>
+    <color name="yellow">#d0fc7d</color>
+    <color name="pink">#ed579a</color>
+    <color name="green">#2aed76</color>
+
 </resources>
