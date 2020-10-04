@@ -1,8 +1,33 @@
 <resources>
     <string name="app_name">Sdk</string>
-    <string-array name="paymentMethods">
-        <item>CARD</item>
-        <item>KIOSK</item>
-        <item>CASH</item>
+
+    <string-array name="countries">
+        <item>Al Beheira</item>
+        <item>Al Daqahliya</item>
+        <item>Al Fayoum</item>
+        <item>Al Gharbia</item>
+        <item>Al Meniya</item>
+        <item>Al Monufia</item>
+        <item>Al Sharqia</item>
+        <item>Alexandria</item>
+        <item>Aswan</item>
+        <item>Asyut</item>
+        <item>Bani Souaif</item>
+        <item>Cairo</item>
+        <item>Damietta</item>
+        <item>Giza</item>
+        <item>Ismailia</item>
+        <item>Kafr El Sheikh</item>
+        <item>Luxor</item>
+        <item>Matrooh</item>
+        <item>New Valley</item>
+        <item>North Sinai</item>
+        <item>Port Said</item>
+        <item>Qalyubia</item>
+        <item>Qena</item>
+        <item>Red Sea</item>
+        <item>Sohag</item>
+        <item>South Sinai</item>
+        <item>Suez</item>
     </string-array>
 </resources>
