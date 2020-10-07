@@ -64,7 +64,6 @@
             android:hint="Enter Phone Number"
             android:imeOptions="actionDone"
             android:inputType="phone"
-            android:maxLength="11"
             android:padding="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
