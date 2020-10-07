@@ -59,18 +59,18 @@ class UserActivity : AppCompatActivity() {
                 when (XpayUtils.activePaymentMethods[position]) {
                     PaymentMethods.CASH -> {
                         amount = XpayUtils.PaymentOptionsTotalAmounts?.cash!!;
-                        XpayUtils.payUsing = "cash"
+                        XpayUtils.payUsing = PaymentMethods.CASH
                         showView(constraint_shipping)
                     }
                     PaymentMethods.CARD -> {
                         amount = XpayUtils.PaymentOptionsTotalAmounts?.card!!;
-                        XpayUtils.payUsing ="card"
+                        XpayUtils.payUsing =PaymentMethods.CARD
                         hideView(constraint_shipping);
                         validForm = true
                     }
                     PaymentMethods.KIOSK -> {
                         amount = XpayUtils.PaymentOptionsTotalAmounts?.kiosk!!;
-                        XpayUtils.payUsing ="kiosk"
+                        XpayUtils.payUsing =PaymentMethods.KIOSK
                         hideView(constraint_shipping);
                         validForm = true
                     }
