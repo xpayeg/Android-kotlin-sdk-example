@@ -7,8 +7,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.chip.Chip
-import com.xpay.kotlin.models.PrepareAmount
 import com.xpay.kotlinutils.XpayUtils
+import com.xpay.kotlinutils.model.PreparedAmounts
 import dmax.dialog.SpotsDialog
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -59,7 +59,7 @@ class Login : AppCompatActivity() {
         group1.setOnCheckedChangeListener { group, checkedId: Int ->
             // Get the checked chip instance from chip group
             val chip: Chip? = findViewById(checkedId)
-
+            Log.i("Login", "onCreate: Color Changed")
             chip?.let {
                 for (i in 0 until group.childCount) {
                     group.getChildAt(i).isClickable = true
@@ -81,9 +81,9 @@ class Login : AppCompatActivity() {
         }
     }
 
-    fun userSuccess(res: PrepareAmount) {
+    fun userSuccess(res: PreparedAmounts) {
         dialog?.dismiss()
-        val amount: String = res.data.total_amount.toString()
+        val amount: String = res.total_amount.toString()
         val intent = Intent(this, UserActivity::class.java)
         intent.putExtra("AMOUNT", amount)
         startActivity(intent)

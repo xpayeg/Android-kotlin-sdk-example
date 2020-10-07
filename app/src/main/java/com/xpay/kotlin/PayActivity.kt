@@ -24,12 +24,12 @@ class PayActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pay)
         dialog = SpotsDialog.Builder().setContext(this).build()
-        if (XpayUtils.iframeUrl != null) {
+        if (intent.hasExtra("URL")) {
             dialog?.show()
             showHide(webView2)
             showHide(btnDone)
             constrain_status.setBackgroundColor(ContextCompat.getColor(this, R.color.dark_gray))
-            webView2.loadUrl(XpayUtils.iframeUrl)
+            webView2.loadUrl(intent.getStringExtra("URL"))
             webView2.webViewClient = object : WebViewClient() {
                 override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
 
@@ -41,7 +41,7 @@ class PayActivity : AppCompatActivity() {
                 }
             }
         } else {
-            if (XpayUtils.shippingInfo != null && XpayUtils.payUsing == "cash") {
+            if (XpayUtils.shippingInfo != null ) {
                 txt_status.text = "Successful Payment"
                 txt_status.setTextColor(Color.parseColor("#4C9A2A"));
             }

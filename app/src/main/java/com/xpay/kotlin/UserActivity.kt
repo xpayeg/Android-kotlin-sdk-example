@@ -8,11 +8,11 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.xpay.kotlin.models.User
 import com.xpay.kotlinutils.XpayUtils
 import com.xpay.kotlinutils.model.Info
+import com.xpay.kotlinutils.model.PaymentMethods
+import com.xpay.kotlinutils.model.User
 import kotlinx.android.synthetic.main.activity_user.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -22,20 +22,31 @@ import kotlin.collections.ArrayList
 
 
 class UserActivity : AppCompatActivity() {
-    private var mSpinnerData: MutableList<String>? = XpayUtils.paymentOptions
+    var amount: Number = 0
+    private var mSpinnerData: MutableList<PaymentMethods> = XpayUtils.activePaymentMethods
     private var mStateData: MutableList<String>? = null
     var adapter: ArrayAdapter<String>? = null
+    var adapterCountry: ArrayAdapter<String>? = null
     var validForm: Boolean = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user)
 
-        adapter = mSpinnerData?.let {
+        val paymentMethodsList : MutableList<String> = mutableListOf<String>()
+
+        for(i in mSpinnerData){
+            paymentMethodsList.add(i.toString())
+        }
+
+        adapter = paymentMethodsList.toList().let {
             ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, it
             )
         }
-        var amount: Number = 0
+
+        spinner.adapter =adapter
+
+
         adapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.adapter = adapter
         spinner.onItemSelectedListener = object : OnItemSelectedListener {
@@ -45,22 +56,27 @@ class UserActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                when (XpayUtils.paymentOptions[position]) {
-                    "CASH" -> {
-                        amount = XpayUtils.totalAmount?.cash!!; XpayUtils.payUsing =
-                            "cash";showView(constraint_shipping)
+                when (XpayUtils.activePaymentMethods[position]) {
+                    PaymentMethods.CASH -> {
+                        amount = XpayUtils.PaymentOptionsTotalAmounts?.cash!!;
+                        XpayUtils.payUsing = "cash"
+                        showView(constraint_shipping)
                     }
-                    "CARD" -> {
-                        amount = XpayUtils.totalAmount?.card!!; XpayUtils.payUsing =
-                            "card"; hideView(constraint_shipping);validForm = true
+                    PaymentMethods.CARD -> {
+                        amount = XpayUtils.PaymentOptionsTotalAmounts?.card!!;
+                        XpayUtils.payUsing ="card"
+                        hideView(constraint_shipping);
+                        validForm = true
                     }
-                    "KIOSK" -> {
-                        amount = XpayUtils.totalAmount?.kiosk!!; XpayUtils.payUsing =
-                            "kiosk"; hideView(constraint_shipping);validForm = true
+                    PaymentMethods.KIOSK -> {
+                        amount = XpayUtils.PaymentOptionsTotalAmounts?.kiosk!!;
+                        XpayUtils.payUsing ="kiosk"
+                        hideView(constraint_shipping);
+                        validForm = true
                     }
                 }
-                totalAmountTxt.setText("Total Amount: ${amount} Egp")
-                XpayUtils.amount = String.format("%.2f", amount).toDouble()
+                amount = String.format("%.2f", amount).toDouble()
+                totalAmountTxt.text = "Total Amount: ${amount} Egp"
             }
 
             override fun onNothingSelected(parentView: AdapterView<*>?) {
@@ -127,17 +143,17 @@ class UserActivity : AppCompatActivity() {
                 }
             }
 
-            if (fullName.isNotEmpty() && email.isEmailValid() && phone.length == 11 && validForm) {
+            if (fullName.isNotEmpty() && email.isEmailValid() && phone.length >= 9 && validForm) {
                 val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("TOTAL_AMOUNT", getIntent().getStringExtra("AMOUNT"))
+                intent.putExtra("TOTAL_AMOUNT",amount.toString())
                 startActivity(intent)
-                XpayUtils.user = User(fullName, email, phone)
+                XpayUtils.userInfo = User(fullName, email, phone)
             } else {
                 if (fullName.isEmpty())
                     userName2.setError("Enter valid Full Name")
                 if (!email.isEmailValid())
                     userEmail.setError("Enter valid Email")
-                if (phone.isEmpty() || phone.length < 11)
+                if (phone.isEmpty() || phone.length < 9)
                     userPhone.setError("Enter valid Phone Number")
             }
         }
@@ -145,7 +161,7 @@ class UserActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        mSpinnerData?.clear()
+        mSpinnerData.clear()
 
     }
 
@@ -172,13 +188,13 @@ class UserActivity : AppCompatActivity() {
             list.add(sessionArray.getString(i))
         }
         mStateData = list
-        adapter = mStateData?.let {
+        adapterCountry = mStateData?.let {
             ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, it
             )
         }
-        adapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        sp_state.adapter = adapter
+        adapterCountry?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        sp_state.adapter = adapterCountry
     }
 
     fun showView(view: View) {

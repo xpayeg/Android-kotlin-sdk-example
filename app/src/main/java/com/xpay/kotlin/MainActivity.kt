@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.xpay.kotlin.models.PayResponse
+import com.xpay.kotlin.models.PayData
 import com.xpay.kotlinutils.XpayUtils
 import dmax.dialog.SpotsDialog
 import kotlinx.android.synthetic.main.activity_main.*
@@ -18,16 +18,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         dialog = SpotsDialog.Builder().setContext(this@MainActivity).build()
 
-        textName.text = "Name: \n${XpayUtils.user!!.name}"
-        textEmail.text = "Email: \n${XpayUtils.user!!.email}"
-        txtPhone.text = "Phone: \n+2${XpayUtils.user?.phone}"
+        textName.text = "Name: \n${XpayUtils.userInfo!!.name}"
+        textEmail.text = "Email: \n${XpayUtils.userInfo!!.email}"
+        txtPhone.text = "Phone: \n${XpayUtils.userInfo?.phone}"
         txtCommunity.text = "Connunity ID: \n${XpayUtils.communityId}"
         textVariableID.text = "Variable ID: \n${XpayUtils.variableAmountID}"
         txtMethod.text = "Payment Method: \n${XpayUtils.payUsing}"
-        totalAmount.text = "Total Amount: \n${XpayUtils.amount}"
+        totalAmount.text="Total Amount: \n${intent.getStringExtra("TOTAL_AMOUNT")?.toDouble()}"
 
         doneButton.setOnClickListener {
-            val totalAmount = getIntent().getStringExtra("TOTAL_AMOUNT")?.toDouble()
+            val totalAmount = intent.getStringExtra("TOTAL_AMOUNT")?.toDouble()
             if (totalAmount != null) {
                 dialog!!.show()
                 XpayUtils.pay(::userSuccess, ::userFailure)
@@ -36,15 +36,16 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun userSuccess(res: PayResponse) {
+    fun userSuccess(res: PayData) {
         dialog?.dismiss()
-        XpayUtils.iframeUrl = res.data.iframe_url
-        if (res.data.iframe_url != null) {
-            startActivity(Intent(this, PayActivity::class.java))
-        } else if (res.data.message != null) {
-            val intent = Intent(baseContext, PayActivity::class.java)
-            intent.putExtra("UUID", res.data.transaction_uuid)
-            intent.putExtra("MESSAGE", res.data.message)
+        val intent = Intent(baseContext, PayActivity::class.java)
+//        XpayUtils.iframeUrl = res.iframe_url
+        if (res.iframe_url != null) {
+            intent.putExtra("URL", res.iframe_url)
+            startActivity(intent)
+        } else if (res.message != null) {
+            intent.putExtra("UUID", res.transaction_uuid)
+            intent.putExtra("MESSAGE", res.message)
             startActivity(intent)
         }
     }

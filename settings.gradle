@@ -1,2 +1,3 @@
+include ':xpay'
 rootProject.name='Kotlin'
 include ':app'
