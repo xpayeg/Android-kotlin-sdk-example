@@ -5,10 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.xpay.kotlin.models.PayData
 import com.xpay.kotlinutils.XpayUtils
+import com.xpay.kotlinutils.models.api.pay.PayData
 import dmax.dialog.SpotsDialog
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     var dialog: AlertDialog? = null
@@ -24,13 +26,16 @@ class MainActivity : AppCompatActivity() {
         txtCommunity.text = "Connunity ID: \n${XpayUtils.communityId}"
         textVariableID.text = "Variable ID: \n${XpayUtils.variableAmountID}"
         txtMethod.text = "Payment Method: \n${XpayUtils.payUsing}"
-        totalAmount.text="Total Amount: \n${intent.getStringExtra("TOTAL_AMOUNT")?.toDouble()}"
+        totalAmount.text = "Total Amount: \n${intent.getStringExtra("TOTAL_AMOUNT")?.toDouble()}"
 
         doneButton.setOnClickListener {
             val totalAmount = intent.getStringExtra("TOTAL_AMOUNT")?.toDouble()
             if (totalAmount != null) {
                 dialog!!.show()
-                XpayUtils.pay(::userSuccess, ::userFailure)
+                GlobalScope.launch {
+                    val payRes = XpayUtils.pay()
+                    payRes?.let { userSuccess(payRes) }
+                }
             }
         }
 

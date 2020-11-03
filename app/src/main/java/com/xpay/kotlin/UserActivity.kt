@@ -2,6 +2,7 @@ package com.xpay.kotlin
 
 import android.content.Context
 import android.content.Intent
+import android.icu.text.IDNA
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -10,9 +11,9 @@ import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.xpay.kotlinutils.XpayUtils
-import com.xpay.kotlinutils.model.Info
-import com.xpay.kotlinutils.model.PaymentMethods
-import com.xpay.kotlinutils.model.User
+import com.xpay.kotlinutils.models.PaymentMethods
+import com.xpay.kotlinutils.models.ShippingInfo
+import com.xpay.kotlinutils.models.User
 import kotlinx.android.synthetic.main.activity_user.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -117,7 +118,7 @@ class UserActivity : AppCompatActivity() {
             if (constraint_shipping.visibility == View.VISIBLE) {
                 if (street.isNotEmpty() && building.isNotEmpty() && apartment.isNotEmpty() && floor.isNotEmpty()) {
                     validForm = true
-                    XpayUtils.shippingInfo = Info(
+                    XpayUtils.shippingShippingInfo = ShippingInfo(
                         "EG",
                         sp_state.selectedItem.toString(),
                         sp_country.selectedItem.toString(),

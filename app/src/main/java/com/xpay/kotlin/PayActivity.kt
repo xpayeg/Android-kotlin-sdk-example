@@ -41,7 +41,7 @@ class PayActivity : AppCompatActivity() {
                 }
             }
         } else {
-            if (XpayUtils.shippingInfo != null ) {
+            if (XpayUtils.shippingShippingInfo != null ) {
                 txt_status.text = "Successful Payment"
                 txt_status.setTextColor(Color.parseColor("#4C9A2A"));
             }
