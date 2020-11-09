@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.chip.Chip
 import com.xpay.kotlinutils.XpayUtils
-import com.xpay.kotlinutils.model.PreparedAmounts
+import kotlinx.coroutines.launch
+import com.xpay.kotlinutils.models.api.prepare.PrepareAmountData
 import dmax.dialog.SpotsDialog
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -74,14 +76,25 @@ class Login : AppCompatActivity() {
         dialog = SpotsDialog.Builder().setContext(this@Login).build()
 
         btnLogin.setOnClickListener {
-            dialog?.show()
-            XpayUtils.addCustomField("color", color)
-            XpayUtils.addCustomField("size", size)
-            XpayUtils.prepareAmount(totalAmount, ::userSuccess, ::userFailure)
+            try {
+                dialog?.show()
+                XpayUtils.addCustomField("color", color)
+                XpayUtils.addCustomField("size", size)
+                lifecycleScope.launch {
+                   val res= XpayUtils.prepareAmount(totalAmount)
+                   res?.let { userSuccess(res) }
+                    println(res)
+                }
+
+            } catch (e: Exception) {
+                println("""Exceptionx: ${e.message}""")
+                dialog?.hide()
+            }
+
         }
     }
 
-    fun userSuccess(res: PreparedAmounts) {
+    fun userSuccess(res: PrepareAmountData) {
         dialog?.dismiss()
         val amount: String = res.total_amount.toString()
         val intent = Intent(this, UserActivity::class.java)

@@ -2,6 +2,7 @@ package com.xpay.kotlin
 
 import android.content.Context
 import android.content.Intent
+import android.icu.text.IDNA
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -10,9 +11,9 @@ import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.xpay.kotlinutils.XpayUtils
-import com.xpay.kotlinutils.model.Info
-import com.xpay.kotlinutils.model.PaymentMethods
-import com.xpay.kotlinutils.model.User
+import com.xpay.kotlinutils.models.PaymentMethods
+import com.xpay.kotlinutils.models.ShippingInfo
+import com.xpay.kotlinutils.models.User
 import kotlinx.android.synthetic.main.activity_user.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -38,14 +39,11 @@ class UserActivity : AppCompatActivity() {
             paymentMethodsList.add(i.toString())
         }
 
-        adapter = paymentMethodsList.toList().let {
+        adapter = paymentMethodsList.distinct().toList().let {
             ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, it
             )
         }
-
-        spinner.adapter =adapter
-
 
         adapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.adapter = adapter
@@ -108,7 +106,7 @@ class UserActivity : AppCompatActivity() {
         btnSubmit.setOnClickListener {
             val fullName: String = userName2.text.toString()
             val email: String = userEmail.text.toString()
-            val phone = "${userPhone.text}"
+            val phone = "+2${userPhone.text}"
             val street = et_street.text.toString()
             val building = et_building.text.toString()
             val apartment = et_apartment.text.toString()
@@ -117,7 +115,7 @@ class UserActivity : AppCompatActivity() {
             if (constraint_shipping.visibility == View.VISIBLE) {
                 if (street.isNotEmpty() && building.isNotEmpty() && apartment.isNotEmpty() && floor.isNotEmpty()) {
                     validForm = true
-                    XpayUtils.shippingInfo = Info(
+                    XpayUtils.ShippingInfo = ShippingInfo(
                         "EG",
                         sp_state.selectedItem.toString(),
                         sp_country.selectedItem.toString(),
