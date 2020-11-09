@@ -11,6 +11,7 @@ import dmax.dialog.SpotsDialog
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
     var dialog: AlertDialog? = null
@@ -31,28 +32,31 @@ class MainActivity : AppCompatActivity() {
         doneButton.setOnClickListener {
             val totalAmount = intent.getStringExtra("TOTAL_AMOUNT")?.toDouble()
             if (totalAmount != null) {
-                dialog!!.show()
-                GlobalScope.launch {
-                    val payRes = XpayUtils.pay()
-                    payRes?.let { userSuccess(payRes) }
+                try {
+                    dialog!!.show()
+                    GlobalScope.launch {
+                        val payRes = XpayUtils.pay()
+                        payRes?.let { userSuccess(payRes) }
+                    }
+                } catch (e: Exception) {
+                    e.message?.let { it1 -> userFailure(it1) }
                 }
             }
         }
 
     }
 
-    fun userSuccess(res: PayData) {
+    private fun userSuccess(res: PayData) {
         dialog?.dismiss()
         val intent = Intent(baseContext, PayActivity::class.java)
-//        XpayUtils.iframeUrl = res.iframe_url
+        println( res.iframe_url)
         if (res.iframe_url != null) {
             intent.putExtra("URL", res.iframe_url)
-            startActivity(intent)
         } else if (res.message != null) {
             intent.putExtra("UUID", res.transaction_uuid)
             intent.putExtra("MESSAGE", res.message)
-            startActivity(intent)
         }
+        startActivity(intent)
     }
 
     fun userFailure(res: String) {

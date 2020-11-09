@@ -25,10 +25,14 @@ class PayActivity : AppCompatActivity() {
         setContentView(R.layout.activity_pay)
         dialog = SpotsDialog.Builder().setContext(this).build()
         if (intent.hasExtra("URL")) {
-            dialog?.show()
+            println(intent.getStringExtra("URL"))
             showHide(webView2)
             showHide(btnDone)
+            dialog?.show()
             constrain_status.setBackgroundColor(ContextCompat.getColor(this, R.color.dark_gray))
+            webView2.isVerticalScrollBarEnabled = true;
+            webView2.isHorizontalScrollBarEnabled = true;
+            webView2.settings.builtInZoomControls = true;
             webView2.loadUrl(intent.getStringExtra("URL"))
             webView2.webViewClient = object : WebViewClient() {
                 override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
@@ -41,7 +45,7 @@ class PayActivity : AppCompatActivity() {
                 }
             }
         } else {
-            if (XpayUtils.shippingShippingInfo != null ) {
+            if (XpayUtils.ShippingInfo != null ) {
                 txt_status.text = "Successful Payment"
                 txt_status.setTextColor(Color.parseColor("#4C9A2A"));
             }

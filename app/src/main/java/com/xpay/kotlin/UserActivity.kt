@@ -39,14 +39,11 @@ class UserActivity : AppCompatActivity() {
             paymentMethodsList.add(i.toString())
         }
 
-        adapter = paymentMethodsList.toList().let {
+        adapter = paymentMethodsList.distinct().toList().let {
             ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, it
             )
         }
-
-        spinner.adapter =adapter
-
 
         adapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.adapter = adapter
@@ -109,7 +106,7 @@ class UserActivity : AppCompatActivity() {
         btnSubmit.setOnClickListener {
             val fullName: String = userName2.text.toString()
             val email: String = userEmail.text.toString()
-            val phone = "${userPhone.text}"
+            val phone = "+2${userPhone.text}"
             val street = et_street.text.toString()
             val building = et_building.text.toString()
             val apartment = et_apartment.text.toString()
@@ -118,7 +115,7 @@ class UserActivity : AppCompatActivity() {
             if (constraint_shipping.visibility == View.VISIBLE) {
                 if (street.isNotEmpty() && building.isNotEmpty() && apartment.isNotEmpty() && floor.isNotEmpty()) {
                     validForm = true
-                    XpayUtils.shippingShippingInfo = ShippingInfo(
+                    XpayUtils.ShippingInfo = ShippingInfo(
                         "EG",
                         sp_state.selectedItem.toString(),
                         sp_country.selectedItem.toString(),

@@ -83,6 +83,7 @@ class Login : AppCompatActivity() {
                 lifecycleScope.launch {
                    val res= XpayUtils.prepareAmount(totalAmount)
                    res?.let { userSuccess(res) }
+                    println(res)
                 }
 
             } catch (e: Exception) {
