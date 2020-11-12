@@ -1,51 +1,30 @@
 package com.xpay.kotlin
 
 import android.app.AlertDialog
+import android.content.ComponentName
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import androidx.annotation.ColorRes
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.*
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import com.xpay.kotlinutils.XpayUtils
 import dmax.dialog.SpotsDialog
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_pay.*
 
 
 class PayActivity : AppCompatActivity() {
-    var dialog: AlertDialog? = null
+    var builder = CustomTabsIntent.Builder()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pay)
-        dialog = SpotsDialog.Builder().setContext(this).build()
-        if (intent.hasExtra("URL")) {
-            println(intent.getStringExtra("URL"))
-            showHide(webView2)
-            showHide(btnDone)
-            dialog?.show()
-            constrain_status.setBackgroundColor(ContextCompat.getColor(this, R.color.dark_gray))
-            webView2.isVerticalScrollBarEnabled = true;
-            webView2.isHorizontalScrollBarEnabled = true;
-            webView2.settings.builtInZoomControls = true;
-            webView2.loadUrl(intent.getStringExtra("URL"))
-            webView2.webViewClient = object : WebViewClient() {
-                override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-
-                }
-
-                override fun onPageFinished(view: WebView, url: String) {
-                    showHide(fab)
-                    dialog?.hide()
-                }
-            }
-        } else {
-            if (XpayUtils.ShippingInfo != null ) {
+            if (XpayUtils.ShippingInfo != null) {
                 txt_status.text = "Successful Payment"
                 txt_status.setTextColor(Color.parseColor("#4C9A2A"));
             }
@@ -53,7 +32,6 @@ class PayActivity : AppCompatActivity() {
             val message = intent.getStringExtra("MESSAGE")
             txtUid.text = uuid
             txtMsg.text = message
-        }
 
         btnDone.setOnClickListener {
             val intent = Intent(this, Login::class.java)
@@ -65,6 +43,7 @@ class PayActivity : AppCompatActivity() {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(intent)
         }
+
     }
 
     fun showHide(view: View) {
@@ -74,4 +53,5 @@ class PayActivity : AppCompatActivity() {
             View.GONE
         }
     }
+
 }
