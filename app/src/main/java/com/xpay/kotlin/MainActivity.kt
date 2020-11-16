@@ -79,10 +79,17 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    private fun goToTransaction() {
+        val intent = Intent(this, TransactionActivity::class.java)
+        intent.putExtra("UUID", uuid)
+        startActivity(intent)
+    }
+
     override fun onRestart() {
         super.onRestart()
         if (isCard) {
-            goHome()
+//            goHome()
+            goToTransaction()
         }
     }
 }
