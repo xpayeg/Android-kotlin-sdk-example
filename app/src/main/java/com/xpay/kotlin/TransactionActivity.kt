@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.xpay.kotlinutils.XpayUtils
-import com.xpay.kotlinutils.models.api.prepare.PrepareAmountData
 import com.xpay.kotlinutils.models.api.transaction.TransactionData
 import dmax.dialog.SpotsDialog
 import kotlinx.android.synthetic.main.activity_transaction.*
@@ -16,12 +15,15 @@ import kotlinx.coroutines.launch
 class TransactionActivity : AppCompatActivity() {
     var dialog: AlertDialog? = null
     var uuid: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_transaction)
+
         dialog = SpotsDialog.Builder().setContext(this@TransactionActivity).build()
         uuid = intent.getStringExtra("UUID")
-        println("""UUID: ${uuid}""")
+
+        // go to login screen
         trans_btn.setOnClickListener {
             val intent = Intent(this, Login::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -29,18 +31,22 @@ class TransactionActivity : AppCompatActivity() {
         }
     }
 
-    fun loadTransaction(Uid:String){
+    private fun loadTransaction(Uid: String) {
+        dialog?.show()
         try {
             lifecycleScope.launch {
-                Uid.let { XpayUtils.getTransaction(it) }
-                dialog?.dismiss()
+                Uid.let {
+                    val res = XpayUtils.getTransaction(it);
+                    res?.let { updateTransaction(it) }
+                }
             }
         } catch (e: Exception) {
-            println("""TransactionDataError: ${uuid}""")
+            dialog?.dismiss()
             Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
-//        }
         }
     }
+
+    // Load transaction when activity launched
     override fun onStart() {
         super.onStart()
         uuid?.let { loadTransaction(it) }
@@ -52,4 +58,5 @@ class TransactionActivity : AppCompatActivity() {
         txt_status_egp.text = """${res.total_amount} EGP"""
         dialog?.dismiss()
     }
+
 }

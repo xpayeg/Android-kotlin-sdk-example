@@ -2,7 +2,6 @@ package com.xpay.kotlin
 
 import android.content.Context
 import android.content.Intent
-import android.icu.text.IDNA
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -23,22 +22,25 @@ import kotlin.collections.ArrayList
 
 
 class UserActivity : AppCompatActivity() {
+
     var amount: Number = 0
     private var mSpinnerData: MutableList<PaymentMethods> = XpayUtils.activePaymentMethods
     private var mStateData: MutableList<String>? = null
     var adapter: ArrayAdapter<String>? = null
     var adapterCountry: ArrayAdapter<String>? = null
     var validForm: Boolean = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user)
 
-        val paymentMethodsList : MutableList<String> = mutableListOf<String>()
-
-        for(i in mSpinnerData){
+        // Convert paymentMethodsList from List<PaymentMethods> to List<String>
+        val paymentMethodsList: MutableList<String> = mutableListOf<String>()
+        for (i in mSpinnerData) {
             paymentMethodsList.add(i.toString())
         }
 
+        // Populate drop down with payment methods List
         adapter = paymentMethodsList.distinct().toList().let {
             ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, it
@@ -47,6 +49,8 @@ class UserActivity : AppCompatActivity() {
 
         adapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.adapter = adapter
+
+        // set actual amount for diffrent payment methods
         spinner.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(
                 parentView: AdapterView<*>?,
@@ -62,13 +66,13 @@ class UserActivity : AppCompatActivity() {
                     }
                     PaymentMethods.CARD -> {
                         amount = XpayUtils.PaymentOptionsTotalAmounts?.card!!;
-                        XpayUtils.payUsing =PaymentMethods.CARD
+                        XpayUtils.payUsing = PaymentMethods.CARD
                         hideView(constraint_shipping);
                         validForm = true
                     }
                     PaymentMethods.KIOSK -> {
                         amount = XpayUtils.PaymentOptionsTotalAmounts?.kiosk!!;
-                        XpayUtils.payUsing =PaymentMethods.KIOSK
+                        XpayUtils.payUsing = PaymentMethods.KIOSK
                         hideView(constraint_shipping);
                         validForm = true
                     }
@@ -82,11 +86,13 @@ class UserActivity : AppCompatActivity() {
             }
         }
 
+        // Populate Countries drop down with data
         val jsonFileString = getJsonDataFromAsset(applicationContext, "countries.json")
         val obj = JSONObject(jsonFileString!!)
         val allCountries =
             ArrayList<String>(Arrays.asList(*resources.getStringArray(R.array.countries)))
 
+        // when country selected > update its villages
         sp_country.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parentView: AdapterView<*>?,
@@ -102,7 +108,7 @@ class UserActivity : AppCompatActivity() {
             }
         }
 
-
+        //
         btnSubmit.setOnClickListener {
             val fullName: String = userName2.text.toString()
             val email: String = userEmail.text.toString()
@@ -112,6 +118,7 @@ class UserActivity : AppCompatActivity() {
             val apartment = et_apartment.text.toString()
             val floor = et_floor.text.toString()
 
+            // validate data entered
             if (constraint_shipping.visibility == View.VISIBLE) {
                 if (street.isNotEmpty() && building.isNotEmpty() && apartment.isNotEmpty() && floor.isNotEmpty()) {
                     validForm = true
@@ -127,23 +134,23 @@ class UserActivity : AppCompatActivity() {
                 } else {
                     validForm = false
                     if (street.isEmpty()) {
-                        et_street.setError("Enter valid street no")
+                        et_street.error = "Enter valid street no"
                     }
                     if (building.isEmpty()) {
-                        et_building.setError("Enter valid building no")
+                        et_building.error = "Enter valid building no"
                     }
                     if (apartment.isEmpty()) {
-                        et_apartment.setError("Enter valid apartment no")
+                        et_apartment.error = "Enter valid apartment no"
                     }
                     if (floor.isEmpty()) {
-                        et_floor.setError("Enter valid floor no")
+                        et_floor.error = "Enter valid floor no"
                     }
                 }
             }
 
             if (fullName.isNotEmpty() && email.isEmailValid() && phone.length >= 9 && validForm) {
                 val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("TOTAL_AMOUNT",amount.toString())
+                intent.putExtra("TOTAL_AMOUNT", amount.toString())
                 startActivity(intent)
                 XpayUtils.userInfo = User(fullName, email, phone)
             } else {
@@ -157,18 +164,12 @@ class UserActivity : AppCompatActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        mSpinnerData.clear()
-
-    }
-
     private fun String.isEmailValid(): Boolean {
         return !TextUtils.isEmpty(this) && android.util.Patterns.EMAIL_ADDRESS.matcher(this)
             .matches()
     }
 
-    fun getJsonDataFromAsset(context: Context, fileName: String): String? {
+    private fun getJsonDataFromAsset(context: Context, fileName: String): String? {
         val jsonString: String
         try {
             jsonString = context.assets.open(fileName).bufferedReader().use { it.readText() }
@@ -179,6 +180,7 @@ class UserActivity : AppCompatActivity() {
         return jsonString
     }
 
+    // populate village drop
     fun populateState(obj: JSONObject, key: String) {
         val sessionArray: JSONArray = obj.optJSONArray(key)!!
         val list = ArrayList<String>()
@@ -195,6 +197,7 @@ class UserActivity : AppCompatActivity() {
         sp_state.adapter = adapterCountry
     }
 
+    // hide/ visible cash form
     fun showView(view: View) {
         view.visibility = View.VISIBLE
     }
