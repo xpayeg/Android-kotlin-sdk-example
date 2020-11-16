@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.activity_pay.*
 
 class PayActivity : AppCompatActivity() {
     var builder = CustomTabsIntent.Builder()
-
+    var uuid:String?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pay)
@@ -28,15 +28,16 @@ class PayActivity : AppCompatActivity() {
                 txt_status.text = "Successful Payment"
                 txt_status.setTextColor(Color.parseColor("#4C9A2A"));
             }
-            val uuid = intent.getStringExtra("UUID")
+             uuid = intent.getStringExtra("UUID")
             val message = intent.getStringExtra("MESSAGE")
             txtUid.text = uuid
             txtMsg.text = message
 
         btnDone.setOnClickListener {
-            val intent = Intent(this, Login::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            startActivity(intent)
+            goToTransaction(uuid!!)
+//            val intent = Intent(this, Login::class.java)
+//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+//            startActivity(intent)
         }
         fab.setOnClickListener {
             val intent = Intent(this, Login::class.java)
@@ -44,6 +45,11 @@ class PayActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+    }
+    private fun goToTransaction(Uid:String) {
+        val intent = Intent(this, TransactionActivity::class.java)
+        intent.putExtra("UUID", Uid)
+        startActivity(intent)
     }
 
     fun showHide(view: View) {
