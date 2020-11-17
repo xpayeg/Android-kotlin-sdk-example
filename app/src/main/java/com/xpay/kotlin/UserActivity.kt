@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.xpay.kotlinutils.XpayUtils
 import com.xpay.kotlinutils.models.PaymentMethods
@@ -105,6 +106,7 @@ class UserActivity : AppCompatActivity() {
             if (constraint_shipping.visibility == View.VISIBLE) {
                 if (validateShippingInfo()) {
                     validShippingInfo = true
+                    // set payment shipping info
                     XpayUtils.ShippingInfo = ShippingInfo(
                         "EG",
                         sp_state.selectedItem.toString(),
@@ -118,12 +120,21 @@ class UserActivity : AppCompatActivity() {
             }
 
             if (validateBillingInfo() && validShippingInfo) {
-                // set user billing info
-                XpayUtils.userInfo =
-                    User(userName.text.toString(), userEmail.text.toString(), "+2${userPhone.text}")
-                val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("TOTAL_AMOUNT", totalAmount.toString())
-                startActivity(intent)
+                // set payment billing info
+                try {
+                    XpayUtils.userInfo =
+                        User(
+                            userName.text.toString(),
+                            userEmail.text.toString(),
+                            "+2${userPhone.text}"
+                        )
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.putExtra("TOTAL_AMOUNT", totalAmount.toString())
+                    startActivity(intent)
+                } catch (e: Exception) {
+                    e.message?.let { it1 -> Toast.makeText(this, it1, Toast.LENGTH_LONG).show() }
+                }
+
             }
         }
     }

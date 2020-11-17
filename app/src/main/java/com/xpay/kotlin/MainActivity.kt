@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     var builder = CustomTabsIntent.Builder()
     private var IS_IFRAME_URL = false
     var uuid: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
