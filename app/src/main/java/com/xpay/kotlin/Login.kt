@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 class Login : AppCompatActivity() {
     var dialog: AlertDialog? = null
-    var itemPrice: Double = 0.56
+    var itemPrice: Double = 225.50
     var totalAmount: Double = itemPrice
     var shoesCount: Int = 1
     var color: String = "Pink"
@@ -84,11 +84,6 @@ class Login : AppCompatActivity() {
                     dialog?.show()
                     val res = XpayUtils.prepareAmount(totalAmount)
                     res?.let { userSuccess(res) }
-
-                    // add color and size chosen as a custom fields to be saved with the transaction
-                    XpayUtils.addCustomField("color", color)
-                    XpayUtils.addCustomField("size", size)
-
                 } catch (e: Exception) {
                     dialog?.hide()
                     e.message?.let { it1 -> userFailure(it1) }
@@ -99,6 +94,10 @@ class Login : AppCompatActivity() {
 
     // Prepare amount success case
     private fun userSuccess(res: PrepareAmountData) {
+        // add color and size chosen as a custom fields to be saved with the transaction
+        XpayUtils.addCustomField("color", color)
+        XpayUtils.addCustomField("size", size)
+
         dialog?.dismiss()
         val amount: String = res.total_amount.toString()
         val intent = Intent(this, UserActivity::class.java)
