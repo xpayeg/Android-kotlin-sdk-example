@@ -13,7 +13,7 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/userName2"
+            android:id="@+id/userName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -46,7 +46,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userName2" />
+            app:layout_constraintTop_toBottomOf="@+id/userName" />
 
         <EditText
             android:id="@+id/userPhone"
@@ -192,7 +192,6 @@
                         android:layout_marginRight="16dp"
                         android:layout_weight="1"
                         android:background="@drawable/background_border"
-                        android:entries="@array/countries"
                         android:padding="12dp"
                         android:spinnerMode="dialog" />
 
