@@ -17,7 +17,6 @@ import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
     var dialog: AlertDialog? = null
-    var builder = CustomTabsIntent.Builder()
     private var isCardPayment = false
     var uuid: String? = null
 
@@ -58,6 +57,8 @@ class MainActivity : AppCompatActivity() {
             // if iframe_url inside the returned response is not null, launch a web view to display the payment form
             isCardPayment = true
             uuid = response.transaction_uuid
+            // start a web view and navigate the user to the credit card form
+            val builder = CustomTabsIntent.Builder()
             builder.setToolbarColor(resources.getColor(R.color.colorPrimary))
             builder.setShowTitle(true)
             val customTabsIntent: CustomTabsIntent = builder.build()
