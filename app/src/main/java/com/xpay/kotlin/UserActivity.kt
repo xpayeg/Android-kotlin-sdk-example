@@ -22,33 +22,30 @@ import kotlin.collections.ArrayList
 
 class UserActivity : AppCompatActivity() {
 
-    var amount: Number = 0
-    var adapter: ArrayAdapter<String>? = null
-    var adapterCountry: ArrayAdapter<String>? = null
+    var totalAmount: Number = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // TODO: 2020-11-17 check if needed
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user)
 
-        // get the available active payment methods
-        val mSpinnerData: MutableList<PaymentMethods> = XpayUtils.activePaymentMethods
-        // Convert paymentMethodsList from List<PaymentMethods> to List<String>
+        // Populate paymentMethodsDropdown with available active payment methods
+        val paymentMethodsAdapter: ArrayAdapter<String>?
         val paymentMethodsList: MutableList<String> = mutableListOf()
-        for (i in mSpinnerData) {
-            paymentMethodsList.add(i.toString())
+        // get the available active payment methods and convert it to List<String>
+        for (paymentMethod in XpayUtils.activePaymentMethods) {
+            paymentMethodsList.add(paymentMethod.toString())
         }
-        // Populate drop down with payment methods List
-        adapter = paymentMethodsList.distinct().toList().let {
+        paymentMethodsAdapter = paymentMethodsList.distinct().toList().let {
             ArrayAdapter(
                 this, android.R.layout.simple_spinner_item, it
             )
         }
-        adapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = adapter
+        paymentMethodsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        paymentMethodsDropdown.adapter = paymentMethodsAdapter
 
         // set actual amount for different payment methods
-        spinner.onItemSelectedListener = object : OnItemSelectedListener {
+        paymentMethodsDropdown.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(
                 parentView: AdapterView<*>?,
                 selectedItemView: View?,
@@ -57,31 +54,31 @@ class UserActivity : AppCompatActivity() {
             ) {
                 when (XpayUtils.activePaymentMethods[position]) {
                     PaymentMethods.CASH -> {
-                        amount = XpayUtils.PaymentOptionsTotalAmounts?.cash!!
+                        totalAmount = XpayUtils.PaymentOptionsTotalAmounts?.cash!!
                         XpayUtils.payUsing = PaymentMethods.CASH
                         showView(constraint_shipping)
                     }
                     PaymentMethods.CARD -> {
-                        amount = XpayUtils.PaymentOptionsTotalAmounts?.card!!
+                        totalAmount = XpayUtils.PaymentOptionsTotalAmounts?.card!!
                         XpayUtils.payUsing = PaymentMethods.CARD
                         hideView(constraint_shipping)
                     }
                     PaymentMethods.KIOSK -> {
-                        amount = XpayUtils.PaymentOptionsTotalAmounts?.kiosk!!
+                        totalAmount = XpayUtils.PaymentOptionsTotalAmounts?.kiosk!!
                         XpayUtils.payUsing = PaymentMethods.KIOSK
                         hideView(constraint_shipping)
                     }
                 }
-                amount = String.format("%.2f", amount).toDouble()
-                totalAmountTxt.text = "Total Amount: ${amount} Egp"
+                totalAmount = String.format("%.2f", totalAmount).toDouble()
+                totalAmountTxt.text = "Total Amount: ${totalAmount} Egp"
             }
 
-            override fun onNothingSelected(parentView: AdapterView<*>?) {
-                // your code here
-            }
+            override fun onNothingSelected(parentView: AdapterView<*>?) {}
         }
 
         // populate country list
+
+        // get the value of countries-cities combinations from assets
         val jsonFileString = getJsonDataFromAsset(applicationContext, "countries.json")
         val obj = JSONObject(jsonFileString!!)
 
@@ -98,9 +95,7 @@ class UserActivity : AppCompatActivity() {
                 populateStates(obj, countriesList[position])
             }
 
-            override fun onNothingSelected(parentView: AdapterView<*>?) {
-                // your code here
-            }
+            override fun onNothingSelected(parentView: AdapterView<*>?) {}
         }
 
         // submit button method
@@ -123,10 +118,11 @@ class UserActivity : AppCompatActivity() {
             }
 
             if (validateBillingInfo() && validShippingInfo) {
+                // set user billing info
                 XpayUtils.userInfo =
                     User(userName.text.toString(), userEmail.text.toString(), "+2${userPhone.text}")
                 val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("TOTAL_AMOUNT", amount.toString())
+                intent.putExtra("TOTAL_AMOUNT", totalAmount.toString())
                 startActivity(intent)
             }
         }
@@ -148,32 +144,34 @@ class UserActivity : AppCompatActivity() {
         return jsonString
     }
 
-    // populate countries dropdown list
+    // populate countries dropdown list and return a list of countries
     fun populateCountries(obj: JSONObject): ArrayList<String> {
+        var adapter: ArrayAdapter<String>? = null
         val countriesList = ArrayList<String>()
         for (i in obj.keys()) {
             countriesList.add(i)
         }
-        adapterCountry = ArrayAdapter(
+        adapter = ArrayAdapter(
             this, android.R.layout.simple_spinner_item, countriesList
         )
-        adapterCountry?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        sp_country.adapter = adapterCountry
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        sp_country.adapter = adapter
         return countriesList
     }
 
     // populate cities dropdown list
     fun populateStates(obj: JSONObject, key: String) {
+        var adapter: ArrayAdapter<String>? = null
         val citiesArray: JSONArray = obj.optJSONArray(key)!!
         val citiesList = ArrayList<String>()
         for (i in 0 until citiesArray.length()) {
             citiesList.add(citiesArray.getString(i))
         }
-        adapterCountry = ArrayAdapter(
+        adapter = ArrayAdapter(
             this, android.R.layout.simple_spinner_item, citiesList
         )
-        adapterCountry?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        sp_state.adapter = adapterCountry
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        sp_state.adapter = adapter
     }
 
     // Show shipping info form
@@ -186,6 +184,7 @@ class UserActivity : AppCompatActivity() {
         view.visibility = View.GONE
     }
 
+    // validate shipping info form
     fun validateShippingInfo(): Boolean {
         // get shipping info
         val street = et_street.text.toString()
@@ -212,6 +211,7 @@ class UserActivity : AppCompatActivity() {
         }
     }
 
+    // validate billing info form
     fun validateBillingInfo(): Boolean {
         // validate billing info
         val fullName: String = userName.text.toString()
@@ -219,7 +219,6 @@ class UserActivity : AppCompatActivity() {
         val phone = "+2${userPhone.text}"
 
         return if (fullName.isNotEmpty() && email.isEmailValid() && phone.length >= 9) {
-            // set user billing info
             true
         } else {
             if (fullName.isEmpty())
