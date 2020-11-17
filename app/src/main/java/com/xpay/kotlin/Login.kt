@@ -86,7 +86,7 @@ class Login : AppCompatActivity() {
                     res?.let { userSuccess(res) }
                 } catch (e: Exception) {
                     dialog?.hide()
-                    e.message?.let { it1 -> userFailure(it1) }
+                    e.message?.let { it1 -> displayError(it1) }
                 }
             }
         }
@@ -106,7 +106,7 @@ class Login : AppCompatActivity() {
     }
 
     // Prepare amount failure case
-    private fun userFailure(res: String) {
+    private fun displayError(res: String) {
         dialog?.dismiss()
         Toast.makeText(this, res, Toast.LENGTH_LONG).show()
     }
