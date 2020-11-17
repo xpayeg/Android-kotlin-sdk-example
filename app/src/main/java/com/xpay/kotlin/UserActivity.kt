@@ -25,7 +25,6 @@ class UserActivity : AppCompatActivity() {
     var amount: Number = 0
     var adapter: ArrayAdapter<String>? = null
     var adapterCountry: ArrayAdapter<String>? = null
-    var validShippingForm: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // TODO: 2020-11-17 check if needed
@@ -66,13 +65,11 @@ class UserActivity : AppCompatActivity() {
                         amount = XpayUtils.PaymentOptionsTotalAmounts?.card!!
                         XpayUtils.payUsing = PaymentMethods.CARD
                         hideView(constraint_shipping)
-                        validShippingForm = true
                     }
                     PaymentMethods.KIOSK -> {
                         amount = XpayUtils.PaymentOptionsTotalAmounts?.kiosk!!
                         XpayUtils.payUsing = PaymentMethods.KIOSK
                         hideView(constraint_shipping)
-                        validShippingForm = true
                     }
                 }
                 amount = String.format("%.2f", amount).toDouble()
@@ -84,12 +81,13 @@ class UserActivity : AppCompatActivity() {
             }
         }
 
+        // populate country list
         val jsonFileString = getJsonDataFromAsset(applicationContext, "countries.json")
         val obj = JSONObject(jsonFileString!!)
 
         val countriesList = populateCountries(obj)
 
-        // when country selected, Update its cities
+        // when a country is selected, populate its cities
         sp_country.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(
                 parentView: AdapterView<*>?,
@@ -105,63 +103,31 @@ class UserActivity : AppCompatActivity() {
             }
         }
 
-        // submit button
+        // submit button method
         btnSubmit.setOnClickListener {
             // validate shipping info(in case cash collection method is selected)
+            var validShippingInfo: Boolean = true
             if (constraint_shipping.visibility == View.VISIBLE) {
-                // get shipping info
-                val street = et_street.text.toString()
-                val building = et_building.text.toString()
-                val apartment = et_apartment.text.toString()
-                val floor = et_floor.text.toString()
-
-                if (street.isNotEmpty() && building.isNotEmpty() && apartment.isNotEmpty() && floor.isNotEmpty()) {
-                    validShippingForm = true
-                    // set user billing info
+                if (validateShippingInfo()) {
+                    validShippingInfo = true
                     XpayUtils.ShippingInfo = ShippingInfo(
                         "EG",
                         sp_state.selectedItem.toString(),
                         sp_country.selectedItem.toString(),
-                        apartment,
-                        building,
-                        floor,
-                        street
+                        et_apartment.text.toString(),
+                        et_building.text.toString(),
+                        et_floor.text.toString(),
+                        et_street.text.toString()
                     )
-                } else {
-                    validShippingForm = false
-                    if (street.isEmpty()) {
-                        et_street.error = "Enter valid street name"
-                    }
-                    if (building.isEmpty()) {
-                        et_building.error = "Enter valid building number"
-                    }
-                    if (apartment.isEmpty()) {
-                        et_apartment.error = "Enter valid apartment number"
-                    }
-                    if (floor.isEmpty()) {
-                        et_floor.error = "Enter valid floor number"
-                    }
-                }
+                } else validShippingInfo = false
             }
 
-            // validate billing info
-            val fullName: String = userName.text.toString()
-            val email: String = userEmail.text.toString()
-            val phone = "+2${userPhone.text}"
-
-            if (fullName.isNotEmpty() && email.isEmailValid() && phone.length >= 9 && validShippingForm) {
-                // set user billing info
-                XpayUtils.userInfo = User(fullName, email, phone)
+            if (validateBillingInfo() && validShippingInfo) {
+                XpayUtils.userInfo =
+                    User(userName.text.toString(), userEmail.text.toString(), "+2${userPhone.text}")
                 val intent = Intent(this, MainActivity::class.java)
                 intent.putExtra("TOTAL_AMOUNT", amount.toString())
                 startActivity(intent)
-            } else {
-                if (fullName.isEmpty())
-                    userName.error = "Enter valid Full Name"
-                if (!email.isEmailValid())
-                    userEmail.error = "Enter valid Email"
-                if (phone.isEmpty() || phone.length < 9)
-                    userPhone.error = "Enter valid Phone Number"
             }
         }
     }
@@ -218,5 +184,51 @@ class UserActivity : AppCompatActivity() {
     // Hide shipping info form
     fun hideView(view: View) {
         view.visibility = View.GONE
+    }
+
+    fun validateShippingInfo(): Boolean {
+        // get shipping info
+        val street = et_street.text.toString()
+        val building = et_building.text.toString()
+        val apartment = et_apartment.text.toString()
+        val floor = et_floor.text.toString()
+
+        return if (street.isNotEmpty() && building.isNotEmpty() && apartment.isNotEmpty() && floor.isNotEmpty()) {
+            true
+        } else {
+            if (street.isEmpty()) {
+                et_street.error = "Enter valid street name"
+            }
+            if (building.isEmpty()) {
+                et_building.error = "Enter valid building number"
+            }
+            if (apartment.isEmpty()) {
+                et_apartment.error = "Enter valid apartment number"
+            }
+            if (floor.isEmpty()) {
+                et_floor.error = "Enter valid floor number"
+            }
+            false
+        }
+    }
+
+    fun validateBillingInfo(): Boolean {
+        // validate billing info
+        val fullName: String = userName.text.toString()
+        val email: String = userEmail.text.toString()
+        val phone = "+2${userPhone.text}"
+
+        return if (fullName.isNotEmpty() && email.isEmailValid() && phone.length >= 9) {
+            // set user billing info
+            true
+        } else {
+            if (fullName.isEmpty())
+                userName.error = "Enter valid Full Name"
+            if (!email.isEmailValid())
+                userEmail.error = "Enter valid Email"
+            if (phone.isEmpty() || phone.length < 9)
+                userPhone.error = "Enter valid Phone Number"
+            false
+        }
     }
 }
