@@ -14,7 +14,7 @@ import dmax.dialog.SpotsDialog
 import kotlinx.android.synthetic.main.activity_login.*
 
 
-class Login : AppCompatActivity() {
+class ProductActivity : AppCompatActivity() {
     var dialog: AlertDialog? = null
     var itemPrice: Double = 225.50
     var totalAmount: Double = itemPrice
@@ -33,7 +33,7 @@ class Login : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         group.isSingleSelection = true
         group1.isSingleSelection = true
-        dialog = SpotsDialog.Builder().setContext(this@Login).build()
+        dialog = SpotsDialog.Builder().setContext(this@ProductActivity).build()
 
         // increase amount button handler
         fab_increase.setOnClickListener {
@@ -100,7 +100,7 @@ class Login : AppCompatActivity() {
 
         dialog?.dismiss()
         val amount: String = res.total_amount.toString()
-        val intent = Intent(this, UserActivity::class.java)
+        val intent = Intent(this, UserInfoActivity::class.java)
         intent.putExtra("AMOUNT", amount)
         startActivity(intent)
     }

@@ -26,7 +26,7 @@ class TransactionActivity : AppCompatActivity() {
 
         // go to login screen when done button is pressed
         trans_btn.setOnClickListener {
-            val intent = Intent(this, Login::class.java)
+            val intent = Intent(this, ProductActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(intent)
         }
@@ -56,7 +56,6 @@ class TransactionActivity : AppCompatActivity() {
 
     private fun updateTransactionInfo(tx: TransactionData) {
         txt_trans_status.text = """${tx.status} TRANSACTION"""
-//        txt_trans_accessor.text = tx.payment_for
         txt_status_egp.text = """${tx.total_amount} EGP"""
         dialog?.dismiss()
     }
