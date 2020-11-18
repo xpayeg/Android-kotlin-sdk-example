@@ -16,15 +16,15 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 class Login : AppCompatActivity() {
     var dialog: AlertDialog? = null
-    var itemPrice: Double = 225.5
+    var itemPrice: Double = 225.50
     var totalAmount: Double = itemPrice
-    var shoesCount: Int? = 1
+    var shoesCount: Int = 1
     var color: String = "Pink"
     var size: String = "38"
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        // setting Xpay Utils data
+        // set XpayUtils core settings
         XpayUtils.apiKey = "3uBD5mrj.3HSCm46V7xJ5yfIkPb2gBOIUFH4Ks0Ss"
         XpayUtils.communityId = "zogDmQW"
         XpayUtils.variableAmountID = 18
@@ -37,17 +37,17 @@ class Login : AppCompatActivity() {
 
         // increase amount button handler
         fab_increase.setOnClickListener {
-            totalAmount = totalAmount.plus(this.itemPrice);
-            shoesCount = shoesCount?.plus(1)
+            shoesCount = shoesCount.plus(1)
             txt_shoes_amount.text = shoesCount.toString()
+            totalAmount = shoesCount * itemPrice
         }
 
         // decrease amount button handler
         fab_decrease.setOnClickListener {
-            if (shoesCount!! > 1) {
-                shoesCount = shoesCount?.minus(1)
+            if (shoesCount > 1) {
+                shoesCount = shoesCount.minus(1)
                 txt_shoes_amount.text = shoesCount.toString()
-                totalAmount = totalAmount.minus(this.itemPrice);
+                totalAmount = shoesCount * itemPrice
             }
         }
 
@@ -63,7 +63,7 @@ class Login : AppCompatActivity() {
             }
         }
 
-        // Get the checked chip instance from colores chip group
+        // Get the checked chip instance from colors chip group
         group1.setOnCheckedChangeListener { group, checkedId: Int ->
             // Get the checked chip instance from chip group
             val chip: Chip? = findViewById(checkedId)
@@ -78,26 +78,26 @@ class Login : AppCompatActivity() {
 
 
         // Submit button handler
-        btnLogin.setOnClickListener {
-            try {
-                dialog?.show()
-                XpayUtils.addCustomField("color", color)
-                XpayUtils.addCustomField("size", size)
-                lifecycleScope.launch {
+        btnCheckout.setOnClickListener {
+            lifecycleScope.launch {
+                try {
+                    dialog?.show()
                     val res = XpayUtils.prepareAmount(totalAmount)
                     res?.let { userSuccess(res) }
-                    println(res)
+                } catch (e: Exception) {
+                    dialog?.hide()
+                    e.message?.let { it1 -> displayError(it1) }
                 }
-            } catch (e: Exception) {
-                e.message?.let { it1 -> userFailure(it1) }
-                dialog?.hide()
             }
-
         }
     }
 
     // Prepare amount success case
     private fun userSuccess(res: PrepareAmountData) {
+        // add color and size chosen as a custom fields to be saved with the transaction
+        XpayUtils.addCustomField("color", color)
+        XpayUtils.addCustomField("size", size)
+
         dialog?.dismiss()
         val amount: String = res.total_amount.toString()
         val intent = Intent(this, UserActivity::class.java)
@@ -106,7 +106,7 @@ class Login : AppCompatActivity() {
     }
 
     // Prepare amount failure case
-    private fun userFailure(res: String) {
+    private fun displayError(res: String) {
         dialog?.dismiss()
         Toast.makeText(this, res, Toast.LENGTH_LONG).show()
     }

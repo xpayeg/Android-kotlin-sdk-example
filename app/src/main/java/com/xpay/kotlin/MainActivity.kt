@@ -17,77 +17,71 @@ import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
     var dialog: AlertDialog? = null
-    var builder = CustomTabsIntent.Builder()
-    private var IS_IFRAME_URL = false
+    private var isCardPayment = false
     var uuid: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         dialog = SpotsDialog.Builder().setContext(this@MainActivity).build()
 
-        // confirm payment information before make payment
+        // Display Payment info to user before submitting
         textName.text = "Name: \n${XpayUtils.userInfo!!.name}"
         textEmail.text = "Email: \n${XpayUtils.userInfo!!.email}"
         txtPhone.text = "Phone: \n${XpayUtils.userInfo?.phone}"
-        txtCommunity.text = "Connunity ID: \n${XpayUtils.communityId}"
-        textVariableID.text = "Variable ID: \n${XpayUtils.variableAmountID}"
+//        txtCommunity.text = "Connunity ID: \n${XpayUtils.communityId}"
+//        textVariableID.text = "Variable ID: \n${XpayUtils.variableAmountID}"
         txtMethod.text = "Payment Method: \n${XpayUtils.payUsing}"
         totalAmount.text = "Total Amount: \n${intent.getStringExtra("TOTAL_AMOUNT")?.toDouble()}"
 
-        // call Pay function
-        doneButton.setOnClickListener {
-            val totalAmount = intent.getStringExtra("TOTAL_AMOUNT")?.toDouble()
-            if (totalAmount != null) {
-                try {
-                    dialog!!.show()
-                    GlobalScope.launch {
-                        val payRes = XpayUtils.pay()
-                        payRes?.let { userSuccess(payRes) }
-                    }
-                } catch (e: Exception) {
-                    e.message?.let { it1 -> userFailure(it1) }
+        // Confirm button method
+        Confirmbtn.setOnClickListener {
+            try {
+                dialog!!.show()
+                GlobalScope.launch {
+                    val response = XpayUtils.pay()
+                    response?.let { completePayment(response) }
                 }
+            } catch (e: Exception) {
+                dialog?.dismiss()
+                e.message?.let { it1 -> Toast.makeText(this, it1, Toast.LENGTH_LONG).show() }
             }
         }
 
     }
 
     // when Payment successful
-    private fun userSuccess(res: PayData) {
+    private fun completePayment(response: PayData) {
         dialog?.dismiss()
-        val intent = Intent(baseContext, PayActivity::class.java)
-        if (res.iframe_url != null) {
-            IS_IFRAME_URL = true
-            uuid = res.transaction_uuid
+        if (response.iframe_url != null) {
+            // if iframe_url inside the returned response is not null, launch a web view to display the payment form
+            isCardPayment = true
+            uuid = response.transaction_uuid
+            // start a web view and navigate the user to the credit card form
+            val builder = CustomTabsIntent.Builder()
             builder.setToolbarColor(resources.getColor(R.color.colorPrimary))
             builder.setShowTitle(true)
             val customTabsIntent: CustomTabsIntent = builder.build()
-            customTabsIntent.launchUrl(this@MainActivity, Uri.parse(res.iframe_url))
-        } else if (res.message != null) {
-            intent.putExtra("UUID", res.transaction_uuid)
-            intent.putExtra("MESSAGE", res.message)
+            customTabsIntent.launchUrl(this@MainActivity, Uri.parse(response.iframe_url))
+        } else if (response.message != null) {
+            // if iframe_url inside the returned response is null while the message is not null
+            // this is a kiosk or cash collection payment, just display the message to the user
+            isCardPayment = false
+            val intent = Intent(baseContext, PayActivity::class.java)
+            intent.putExtra("UUID", response.transaction_uuid)
+            intent.putExtra("MESSAGE", response.message)
             startActivity(intent)
         }
-
     }
 
-    // when Payment Fail
-    private fun userFailure(res: String) {
-        dialog?.dismiss()
-        Toast.makeText(this, res, Toast.LENGTH_LONG).show()
-    }
-
-    private fun goToTransaction() {
-        val intent = Intent(this, TransactionActivity::class.java)
-        intent.putExtra("UUID", uuid)
-        startActivity(intent)
-    }
-
-    // custom func to handle webview dismiss case
+    // method to handle web view dismiss case
+    // when the user dismisses the web view then navigate to transaction activity which shows him the transaction info
     override fun onRestart() {
         super.onRestart()
-        if (IS_IFRAME_URL) {
-            goToTransaction()
+        if (isCardPayment) {
+            val intent = Intent(this, TransactionActivity::class.java)
+            intent.putExtra("UUID", uuid)
+            startActivity(intent)
         }
     }
 }
