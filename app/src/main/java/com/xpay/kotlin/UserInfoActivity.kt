@@ -21,7 +21,7 @@ import java.io.IOException
 import kotlin.collections.ArrayList
 
 
-class UserActivity : AppCompatActivity() {
+class UserInfoActivity : AppCompatActivity() {
 
     var totalAmount: Number = 0
 
@@ -128,7 +128,7 @@ class UserActivity : AppCompatActivity() {
                             userEmail.text.toString(),
                             "+2${userPhone.text}"
                         )
-                    val intent = Intent(this, MainActivity::class.java)
+                    val intent = Intent(this, PaymentPreviewActivity::class.java)
                     intent.putExtra("TOTAL_AMOUNT", totalAmount.toString())
                     startActivity(intent)
                 } catch (e: Exception) {

@@ -15,7 +15,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
-class MainActivity : AppCompatActivity() {
+class PaymentPreviewActivity : AppCompatActivity() {
     var dialog: AlertDialog? = null
     private var isCardPayment = false
     var uuid: String? = null
@@ -23,14 +23,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        dialog = SpotsDialog.Builder().setContext(this@MainActivity).build()
+        dialog = SpotsDialog.Builder().setContext(this@PaymentPreviewActivity).build()
 
         // Display Payment info to user before submitting
         textName.text = "Name: \n${XpayUtils.userInfo!!.name}"
         textEmail.text = "Email: \n${XpayUtils.userInfo!!.email}"
         txtPhone.text = "Phone: \n${XpayUtils.userInfo?.phone}"
-//        txtCommunity.text = "Connunity ID: \n${XpayUtils.communityId}"
-//        textVariableID.text = "Variable ID: \n${XpayUtils.variableAmountID}"
         txtMethod.text = "Payment Method: \n${XpayUtils.payUsing}"
         totalAmount.text = "Total Amount: \n${intent.getStringExtra("TOTAL_AMOUNT")?.toDouble()}"
 
@@ -62,12 +60,12 @@ class MainActivity : AppCompatActivity() {
             builder.setToolbarColor(resources.getColor(R.color.colorPrimary))
             builder.setShowTitle(true)
             val customTabsIntent: CustomTabsIntent = builder.build()
-            customTabsIntent.launchUrl(this@MainActivity, Uri.parse(response.iframe_url))
+            customTabsIntent.launchUrl(this@PaymentPreviewActivity, Uri.parse(response.iframe_url))
         } else if (response.message != null) {
             // if iframe_url inside the returned response is null while the message is not null
             // this is a kiosk or cash collection payment, just display the message to the user
             isCardPayment = false
-            val intent = Intent(baseContext, PayActivity::class.java)
+            val intent = Intent(baseContext, CashPaymentActivity::class.java)
             intent.putExtra("UUID", response.transaction_uuid)
             intent.putExtra("MESSAGE", response.message)
             startActivity(intent)
