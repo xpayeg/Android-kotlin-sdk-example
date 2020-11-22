@@ -101,7 +101,6 @@ class ProductActivity : AppCompatActivity() {
         dialog?.dismiss()
         val amount: String = res.total_amount.toString()
         val intent = Intent(this, UserInfoActivity::class.java)
-        intent.putExtra("AMOUNT", amount)
         startActivity(intent)
     }
 
