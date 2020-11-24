@@ -82,16 +82,14 @@ class ProductActivity : AppCompatActivity() {
     }
 
     // Prepare amount success case
-    private fun userSuccess(res: PrepareAmountData) {
+    private fun goToCheckout() {
         // 03-start
         // add color and size chosen as a custom fields to be saved with the transaction
         XpayUtils.addCustomField("color", color)
         XpayUtils.addCustomField("size", size)
         // 03-end
         dialog?.dismiss()
-        val amount: String = res.total_amount.toString()
         val intent = Intent(this, UserInfoActivity::class.java)
-        intent.putExtra("AMOUNT", amount)
         startActivity(intent)
     }
 
