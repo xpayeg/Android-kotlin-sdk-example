@@ -24,10 +24,7 @@ class ProductActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // 01-start
-        // set XpayUtils core settings
-        XpayUtils.apiKey = "3uBD5mrj.3HSCm46V7xJ5yfIkPb2gBOIUFH4Ks0Ss"
-        XpayUtils.communityId = "zogDmQW"
-        XpayUtils.variableAmountID = 18
+
         // 01-end
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -79,16 +76,7 @@ class ProductActivity : AppCompatActivity() {
         // Submit button handler
         btnCheckout.setOnClickListener {
             // 02-start
-            lifecycleScope.launch {
-                try {
-                    dialog?.show()
-                    val res = XpayUtils.prepareAmount(totalAmount)
-                    res?.let { userSuccess(res) }
-                } catch (e: Exception) {
-                    dialog?.hide()
-                    e.message?.let { it1 -> displayError(it1) }
-                }
-            }
+            
             // 02-end
         }
     }
