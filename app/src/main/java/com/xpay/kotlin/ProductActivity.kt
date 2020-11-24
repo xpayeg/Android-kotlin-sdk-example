@@ -82,8 +82,8 @@ class ProductActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 try {
                     dialog?.show()
-                    val res = XpayUtils.prepareAmount(totalAmount)
-                    res?.let { userSuccess(res) }
+                    XpayUtils.prepareAmount(totalAmount)
+                    goToCheckout()
                 } catch (e: Exception) {
                     dialog?.hide()
                     e.message?.let { it1 -> displayError(it1) }
@@ -93,13 +93,12 @@ class ProductActivity : AppCompatActivity() {
     }
 
     // Prepare amount success case
-    private fun userSuccess(res: PrepareAmountData) {
+    private fun goToCheckout() {
         // add color and size chosen as a custom fields to be saved with the transaction
         XpayUtils.addCustomField("color", color)
         XpayUtils.addCustomField("size", size)
 
         dialog?.dismiss()
-        val amount: String = res.total_amount.toString()
         val intent = Intent(this, UserInfoActivity::class.java)
         startActivity(intent)
     }
