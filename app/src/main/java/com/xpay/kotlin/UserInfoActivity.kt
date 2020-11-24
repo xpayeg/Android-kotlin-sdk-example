@@ -26,10 +26,9 @@ class UserInfoActivity : AppCompatActivity() {
     var totalAmount: Number = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // TODO: 2020-11-17 check if needed
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user)
-
+        //  01-start
         // Populate paymentMethodsDropdown with available active payment methods
         val paymentMethodsAdapter: ArrayAdapter<String>?
         val paymentMethodsList: MutableList<String> = mutableListOf()
@@ -44,7 +43,7 @@ class UserInfoActivity : AppCompatActivity() {
         }
         paymentMethodsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         paymentMethodsDropdown.adapter = paymentMethodsAdapter
-
+        //  01-end
         // set actual amount for different payment methods
         paymentMethodsDropdown.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(
@@ -53,6 +52,7 @@ class UserInfoActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
+                // 02-start
                 when (XpayUtils.activePaymentMethods[position]) {
                     PaymentMethods.CASH -> {
                         totalAmount = XpayUtils.PaymentOptionsTotalAmounts?.cash!!
@@ -72,11 +72,12 @@ class UserInfoActivity : AppCompatActivity() {
                 }
                 totalAmount = String.format("%.2f", totalAmount).toDouble()
                 totalAmountTxt.text = "Total Amount: ${totalAmount} Egp"
+                // 02-end
             }
 
             override fun onNothingSelected(parentView: AdapterView<*>?) {}
         }
-
+        // 03-start
         // populate country list
 
         // get the value of countries-cities combinations from assets
@@ -98,10 +99,11 @@ class UserInfoActivity : AppCompatActivity() {
 
             override fun onNothingSelected(parentView: AdapterView<*>?) {}
         }
-
+        // 03-end
         // submit button method
         btnSubmit.setOnClickListener {
             // validate shipping info(in case cash collection method is selected)
+            // 04-start
             var validShippingInfo: Boolean = true
             if (constraint_shipping.visibility == View.VISIBLE) {
                 if (validateShippingInfo()) {
@@ -136,6 +138,7 @@ class UserInfoActivity : AppCompatActivity() {
                 }
 
             }
+            // 04-end
         }
     }
 

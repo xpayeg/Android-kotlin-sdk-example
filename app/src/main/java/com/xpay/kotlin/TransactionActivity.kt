@@ -21,8 +21,6 @@ class TransactionActivity : AppCompatActivity() {
         setContentView(R.layout.activity_transaction)
         dialog = SpotsDialog.Builder().setContext(this@TransactionActivity).build()
 
-        // get Transaction UUID value
-        uuid = intent.getStringExtra("UUID")
 
         // go to login screen when done button is pressed
         trans_btn.setOnClickListener {
@@ -35,10 +33,15 @@ class TransactionActivity : AppCompatActivity() {
     // Load transaction when activity launches
     override fun onStart() {
         super.onStart()
+        // 01-start
+        // get Transaction UUID value from the previous
+        uuid = intent.getStringExtra("UUID")
         uuid?.let { loadTransaction(it) }
+        // 01-end
     }
 
     private fun loadTransaction(uuid: String) {
+        // 02-start
         lifecycleScope.launch {
             try {
                 dialog?.show()
@@ -52,11 +55,14 @@ class TransactionActivity : AppCompatActivity() {
             }
 
         }
+        // 02-end
     }
 
     private fun updateTransactionInfo(tx: TransactionData) {
+        // 03-start
         txt_trans_status.text = """${tx.status} TRANSACTION"""
         txt_status_egp.text = """${tx.total_amount} EGP"""
+        // 03-end
         dialog?.dismiss()
     }
 

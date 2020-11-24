@@ -23,12 +23,12 @@ class ProductActivity : AppCompatActivity() {
     var size: String = "38"
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
+        // 01-start
         // set XpayUtils core settings
         XpayUtils.apiKey = "3uBD5mrj.3HSCm46V7xJ5yfIkPb2gBOIUFH4Ks0Ss"
         XpayUtils.communityId = "zogDmQW"
         XpayUtils.variableAmountID = 18
-
+        // 01-end
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         group.isSingleSelection = true
@@ -76,9 +76,9 @@ class ProductActivity : AppCompatActivity() {
             }
         }
 
-
         // Submit button handler
         btnCheckout.setOnClickListener {
+            // 02-start
             lifecycleScope.launch {
                 try {
                     dialog?.show()
@@ -89,15 +89,17 @@ class ProductActivity : AppCompatActivity() {
                     e.message?.let { it1 -> displayError(it1) }
                 }
             }
+            // 02-end
         }
     }
 
     // Prepare amount success case
     private fun userSuccess(res: PrepareAmountData) {
+        // 03-start
         // add color and size chosen as a custom fields to be saved with the transaction
         XpayUtils.addCustomField("color", color)
         XpayUtils.addCustomField("size", size)
-
+        // 03-end
         dialog?.dismiss()
         val amount: String = res.total_amount.toString()
         val intent = Intent(this, UserInfoActivity::class.java)
