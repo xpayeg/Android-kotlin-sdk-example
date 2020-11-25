@@ -35,7 +35,7 @@ class TransactionActivity : AppCompatActivity() {
 
     private fun loadTransaction(Uid: String) {
         // 02-start
-        
+
         // 02-end
     }
 
