@@ -26,27 +26,13 @@ class PaymentPreviewActivity : AppCompatActivity() {
         dialog = SpotsDialog.Builder().setContext(this@PaymentPreviewActivity).build()
 
         // 01-start
-        // Display Payment info to user before submitting
-        textName.text = "Name: \n${XpayUtils.userInfo!!.name}"
-        textEmail.text = "Email: \n${XpayUtils.userInfo!!.email}"
-        txtPhone.text = "Phone: \n${XpayUtils.userInfo?.phone}"
-        txtMethod.text = "Payment Method: \n${XpayUtils.payUsing}"
-        totalAmount.text = "Total Amount: \n${intent.getStringExtra("TOTAL_AMOUNT")?.toDouble()}"
+
         // 01-end
 
         // Confirm button method
         Confirmbtn.setOnClickListener {
             // 02-start
-            try {
-                dialog!!.show()
-                GlobalScope.launch {
-                    val response = XpayUtils.pay()
-                    response?.let { completePayment(response) }
-                }
-            } catch (e: Exception) {
-                dialog?.dismiss()
-                e.message?.let { it1 -> Toast.makeText(this, it1, Toast.LENGTH_LONG).show() }
-            }
+
             // 02-end
         }
 
@@ -56,25 +42,7 @@ class PaymentPreviewActivity : AppCompatActivity() {
     private fun completePayment(response: PayData) {
         dialog?.dismiss()
         // 03-start
-        if (response.iframe_url != null) {
-            // if iframe_url inside the returned response is not null, launch a web view to display the payment form
-            isCardPayment = true
-            uuid = response.transaction_uuid
-            // start a web view and navigate the user to the credit card form
-            val builder = CustomTabsIntent.Builder()
-            builder.setToolbarColor(resources.getColor(R.color.colorPrimary))
-            builder.setShowTitle(true)
-            val customTabsIntent: CustomTabsIntent = builder.build()
-            customTabsIntent.launchUrl(this@PaymentPreviewActivity, Uri.parse(response.iframe_url))
-        } else if (response.message != null) {
-            // if iframe_url inside the returned response is null while the message is not null
-            // this is a kiosk or cash collection payment, just display the message to the user
-            isCardPayment = false
-            val intent = Intent(baseContext, CashPaymentActivity::class.java)
-            intent.putExtra("UUID", response.transaction_uuid)
-            intent.putExtra("MESSAGE", response.message)
-            startActivity(intent)
-        }
+
         // 03-end
     }
 
@@ -83,11 +51,7 @@ class PaymentPreviewActivity : AppCompatActivity() {
     override fun onRestart() {
         super.onRestart()
         // 04-start
-        if (isCardPayment) {
-            val intent = Intent(this, TransactionActivity::class.java)
-            intent.putExtra("UUID", uuid)
-            startActivity(intent)
-        }
+
         // 04-end
     }
 }
