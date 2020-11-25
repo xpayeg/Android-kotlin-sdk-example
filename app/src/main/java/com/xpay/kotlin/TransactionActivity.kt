@@ -34,27 +34,16 @@ class TransactionActivity : AppCompatActivity() {
     }
 
     private fun loadTransaction(Uid: String) {
-        dialog?.show()
-        try {
-            lifecycleScope.launch {
-                Uid.let {
-                    val res = XpayUtils.getTransaction(it);
-                    res?.let { updateTransaction(it) }
-                }
-            }
-        } catch (e: Exception) {
-            dialog?.dismiss()
-            Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
-        }
+        // 02-start
+        
+        // 02-end
     }
 
     // Load transaction when activity launched
     override fun onStart() {
         super.onStart()
         // 01-start
-        // get Transaction UUID value from the previous
-        uuid = intent.getStringExtra("UUID")
-        uuid?.let { loadTransaction(it) }
+
         // 01-end
     }
 
@@ -101,6 +90,11 @@ class TransactionActivity : AppCompatActivity() {
             }
         }
         dialog?.dismiss()
+    }
+
+    private fun displayError(res: String) {
+        dialog?.dismiss()
+        Toast.makeText(this, res, Toast.LENGTH_LONG).show()
     }
 
 }
