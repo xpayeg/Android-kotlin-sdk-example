@@ -1,24 +1,17 @@
 package com.xpay.kotlin
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.xpay.kotlinutils.XpayUtils
-import com.xpay.kotlinutils.models.BillingInfo
-import com.xpay.kotlinutils.models.PaymentMethods
-import com.xpay.kotlinutils.models.ShippingInfo
 import kotlinx.android.synthetic.main.activity_user_info.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
-import kotlin.collections.ArrayList
 
 
 class UserInfoActivity : AppCompatActivity() {

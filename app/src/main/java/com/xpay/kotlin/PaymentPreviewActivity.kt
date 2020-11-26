@@ -1,18 +1,11 @@
 package com.xpay.kotlin
 
 import android.app.AlertDialog
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.browser.customtabs.CustomTabsIntent
-import com.xpay.kotlinutils.XpayUtils
 import com.xpay.kotlinutils.models.api.pay.PayData
 import dmax.dialog.SpotsDialog
 import kotlinx.android.synthetic.main.activity_payment_preview.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class PaymentPreviewActivity : AppCompatActivity() {
     var dialog: AlertDialog? = null

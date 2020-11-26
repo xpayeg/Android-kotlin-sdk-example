@@ -3,16 +3,13 @@ package com.xpay.kotlin
 import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
-import com.xpay.kotlinutils.XpayUtils
 import com.xpay.kotlinutils.models.api.transaction.TransactionData
 import dmax.dialog.SpotsDialog
 import kotlinx.android.synthetic.main.activity_transaction.*
-import kotlinx.coroutines.launch
 
 class TransactionActivity : AppCompatActivity() {
     var dialog: AlertDialog? = null
