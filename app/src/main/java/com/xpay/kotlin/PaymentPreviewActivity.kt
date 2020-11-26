@@ -10,10 +10,9 @@ import androidx.browser.customtabs.CustomTabsIntent
 import com.xpay.kotlinutils.XpayUtils
 import com.xpay.kotlinutils.models.api.pay.PayData
 import dmax.dialog.SpotsDialog
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_payment_preview.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 class PaymentPreviewActivity : AppCompatActivity() {
     var dialog: AlertDialog? = null
@@ -22,7 +21,7 @@ class PaymentPreviewActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_payment_preview)
         dialog = SpotsDialog.Builder().setContext(this@PaymentPreviewActivity).build()
 
         // 01-start

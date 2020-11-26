@@ -11,10 +11,10 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.xpay.kotlinutils.XpayUtils
+import com.xpay.kotlinutils.models.BillingInfo
 import com.xpay.kotlinutils.models.PaymentMethods
 import com.xpay.kotlinutils.models.ShippingInfo
-import com.xpay.kotlinutils.models.User
-import kotlinx.android.synthetic.main.activity_user.*
+import kotlinx.android.synthetic.main.activity_user_info.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
@@ -27,7 +27,7 @@ class UserInfoActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user)
+        setContentView(R.layout.activity_user_info)
         //  01-start
 
         //  01-end

@@ -3,13 +3,13 @@ package com.xpay.kotlin
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_pay.*
+import kotlinx.android.synthetic.main.activity_cash_payment.*
 
 
 class CashPaymentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_pay)
+        setContentView(R.layout.activity_cash_payment)
 
         val uuid = intent.getStringExtra("UUID")
         val message = intent.getStringExtra("MESSAGE")
