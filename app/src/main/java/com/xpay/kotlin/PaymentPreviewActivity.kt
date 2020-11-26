@@ -26,9 +26,9 @@ class PaymentPreviewActivity : AppCompatActivity() {
         dialog = SpotsDialog.Builder().setContext(this@PaymentPreviewActivity).build()
 
         // Display Payment info to user before submitting
-        textName.text = "Name: \n${XpayUtils.userInfo!!.name}"
-        textEmail.text = "Email: \n${XpayUtils.userInfo!!.email}"
-        txtPhone.text = "Phone: \n${XpayUtils.userInfo?.phone}"
+        textName.text = "Name: \n${XpayUtils.billingInfo!!.name}"
+        textEmail.text = "Email: \n${XpayUtils.billingInfo!!.email}"
+        txtPhone.text = "Phone: \n${XpayUtils.billingInfo?.phone}"
         txtMethod.text = "Payment Method: \n${XpayUtils.payUsing}"
         totalAmount.text = "Total Amount: \n${intent.getStringExtra("TOTAL_AMOUNT")?.toDouble()}"
 

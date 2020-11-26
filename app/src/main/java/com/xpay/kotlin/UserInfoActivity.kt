@@ -11,9 +11,9 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.xpay.kotlinutils.XpayUtils
+import com.xpay.kotlinutils.models.BillingInfo
 import com.xpay.kotlinutils.models.PaymentMethods
 import com.xpay.kotlinutils.models.ShippingInfo
-import com.xpay.kotlinutils.models.User
 import kotlinx.android.synthetic.main.activity_user.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -122,8 +122,8 @@ class UserInfoActivity : AppCompatActivity() {
             if (validateBillingInfo() && validShippingInfo) {
                 // set payment billing info
                 try {
-                    XpayUtils.userInfo =
-                        User(
+                    XpayUtils.billingInfo =
+                        BillingInfo(
                             userName.text.toString(),
                             userEmail.text.toString(),
                             "+2${userPhone.text}"

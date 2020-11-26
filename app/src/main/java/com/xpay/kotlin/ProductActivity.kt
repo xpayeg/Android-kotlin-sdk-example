@@ -26,7 +26,7 @@ class ProductActivity : AppCompatActivity() {
         // set XpayUtils core settings
         XpayUtils.apiKey = "3uBD5mrj.3HSCm46V7xJ5yfIkPb2gBOIUFH4Ks0Ss"
         XpayUtils.communityId = "zogDmQW"
-        XpayUtils.variableAmountID = 18
+        XpayUtils.apiPaymentId = 18
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product)
