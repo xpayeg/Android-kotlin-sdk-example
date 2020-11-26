@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.chip.Chip
-import com.xpay.kotlinutils.XpayUtils
-import kotlinx.coroutines.launch
 import dmax.dialog.SpotsDialog
 import kotlinx.android.synthetic.main.activity_product.*
 
