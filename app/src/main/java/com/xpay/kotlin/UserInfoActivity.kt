@@ -14,7 +14,7 @@ import com.xpay.kotlinutils.XpayUtils
 import com.xpay.kotlinutils.models.BillingInfo
 import com.xpay.kotlinutils.models.PaymentMethods
 import com.xpay.kotlinutils.models.ShippingInfo
-import kotlinx.android.synthetic.main.activity_user.*
+import kotlinx.android.synthetic.main.activity_user_info.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException

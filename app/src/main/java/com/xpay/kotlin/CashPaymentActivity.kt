@@ -3,7 +3,7 @@ package com.xpay.kotlin
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_pay.*
+import kotlinx.android.synthetic.main.activity_cash_payment.*
 
 
 class CashPaymentActivity : AppCompatActivity() {
