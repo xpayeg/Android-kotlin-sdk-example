@@ -22,7 +22,7 @@ class PaymentPreviewActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_payment_preview)
         dialog = SpotsDialog.Builder().setContext(this@PaymentPreviewActivity).build()
 
         // Display Payment info to user before submitting

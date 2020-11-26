@@ -28,7 +28,7 @@ class UserInfoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         // TODO: 2020-11-17 check if needed
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user)
+        setContentView(R.layout.activity_user_info)
 
         // Populate paymentMethodsDropdown with available active payment methods
         val paymentMethodsAdapter: ArrayAdapter<String>?

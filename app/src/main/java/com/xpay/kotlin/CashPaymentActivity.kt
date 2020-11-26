@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.activity_pay.*
 class CashPaymentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_pay)
+        setContentView(R.layout.activity_cash_payment)
 
         val uuid = intent.getStringExtra("UUID")
         val message = intent.getStringExtra("MESSAGE")

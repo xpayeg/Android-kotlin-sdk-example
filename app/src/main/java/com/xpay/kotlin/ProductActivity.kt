@@ -9,7 +9,6 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.chip.Chip
 import com.xpay.kotlinutils.XpayUtils
 import kotlinx.coroutines.launch
-import com.xpay.kotlinutils.models.api.prepare.PrepareAmountData
 import dmax.dialog.SpotsDialog
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -30,7 +29,7 @@ class ProductActivity : AppCompatActivity() {
         XpayUtils.variableAmountID = 18
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_product)
         group.isSingleSelection = true
         group1.isSingleSelection = true
         dialog = SpotsDialog.Builder().setContext(this@ProductActivity).build()
