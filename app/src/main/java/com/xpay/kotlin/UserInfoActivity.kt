@@ -8,6 +8,8 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
+import com.xpay.kotlinutils.XpayUtils
+import com.xpay.kotlinutils.models.PaymentMethods
 import kotlinx.android.synthetic.main.activity_user_info.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -22,7 +24,20 @@ class UserInfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_info)
         //  01-start
-
+        // Populate paymentMethodsDropdown with available active payment methods
+        val paymentMethodsAdapter: ArrayAdapter<String>?
+        val paymentMethodsList: MutableList<String> = mutableListOf()
+        // get the available active payment methods and convert it to List<String>
+        for (paymentMethod in XpayUtils.activePaymentMethods) {
+            paymentMethodsList.add(paymentMethod.toString())
+        }
+        paymentMethodsAdapter = paymentMethodsList.distinct().toList().let {
+            ArrayAdapter(
+                this, android.R.layout.simple_spinner_item, it
+            )
+        }
+        paymentMethodsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        paymentMethodsDropdown.adapter = paymentMethodsAdapter
         //  01-end
         // set actual amount for different payment methods
         paymentMethodsDropdown.onItemSelectedListener = object : OnItemSelectedListener {
@@ -34,6 +49,25 @@ class UserInfoActivity : AppCompatActivity() {
             ) {
                 // 02-start
 
+                when (XpayUtils.activePaymentMethods[position]) {
+                    PaymentMethods.CASH -> {
+                        totalAmount = XpayUtils.PaymentOptionsTotalAmounts?.cash!!
+                        XpayUtils.payUsing = PaymentMethods.CASH
+                        showView(constraint_shipping)
+                    }
+                    PaymentMethods.CARD -> {
+                        totalAmount = XpayUtils.PaymentOptionsTotalAmounts?.card!!
+                        XpayUtils.payUsing = PaymentMethods.CARD
+                        hideView(constraint_shipping)
+                    }
+                    PaymentMethods.KIOSK -> {
+                        totalAmount = XpayUtils.PaymentOptionsTotalAmounts?.kiosk!!
+                        XpayUtils.payUsing = PaymentMethods.KIOSK
+                        hideView(constraint_shipping)
+                    }
+                }
+                totalAmount = String.format("%.2f", totalAmount).toDouble()
+                totalAmountTxt.text = "Total Amount: ${totalAmount} Egp"
                 // 02-end
             }
 
