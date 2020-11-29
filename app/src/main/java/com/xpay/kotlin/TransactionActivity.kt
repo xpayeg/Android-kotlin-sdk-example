@@ -3,9 +3,9 @@ package com.xpay.kotlin
 import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.xpay.kotlinutils.XpayUtils
@@ -33,25 +33,30 @@ class TransactionActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadTransaction(Uid: String) {
-        dialog?.show()
-        try {
-            lifecycleScope.launch {
-                Uid.let {
-                    val res = XpayUtils.getTransaction(it);
-                    res?.let { updateTransaction(it) }
+    private fun loadTransaction(Uuid: String) {
+        // 02-start
+        lifecycleScope.launch {
+            try {
+                dialog?.show()
+                Uuid.let { it ->
+                    val res = XpayUtils.getTransaction(it)
+                    res?.let { updateTransaction(res) }
                 }
+            } catch (e: Exception) {
+                dialog?.dismiss()
+                e.message?.let { displayError(e.message.toString()) }
             }
-        } catch (e: Exception) {
-            dialog?.dismiss()
-            Toast.makeText(this, e.message.toString(), Toast.LENGTH_SHORT).show()
         }
+        // 02-end
     }
 
     // Load transaction when activity launched
     override fun onStart() {
         super.onStart()
+        // 01-start
+        uuid = intent.getStringExtra("UUID")
         uuid?.let { loadTransaction(it) }
+        // 01-end
     }
 
     private fun updateTransaction(res: TransactionData) {
@@ -97,6 +102,11 @@ class TransactionActivity : AppCompatActivity() {
             }
         }
         dialog?.dismiss()
+    }
+
+    private fun displayError(res: String) {
+        dialog?.dismiss()
+        Toast.makeText(this, res, Toast.LENGTH_LONG).show()
     }
 
 }

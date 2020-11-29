@@ -8,9 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.chip.Chip
 import com.xpay.kotlinutils.XpayUtils
-import kotlinx.coroutines.launch
 import dmax.dialog.SpotsDialog
 import kotlinx.android.synthetic.main.activity_product.*
+import kotlinx.coroutines.launch
 
 
 class ProductActivity : AppCompatActivity() {
@@ -22,12 +22,12 @@ class ProductActivity : AppCompatActivity() {
     var size: String = "38"
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
+        // 01-start
         // set XpayUtils core settings
-        XpayUtils.apiKey = "3uBD5mrj.3HSCm46V7xJ5yfIkPb2gBOIUFH4Ks0Ss"
-        XpayUtils.communityId = "zogDmQW"
-        XpayUtils.apiPaymentId = 18
-
+        XpayUtils.apiKey = "Cce74Y3B.J0P4tItq7hGu2ddhCB0WF5ND1eTubkpT"
+        XpayUtils.communityId = "m2J7eBK"
+        XpayUtils.apiPaymentId = 60
+        // 01-end
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product)
         group.isSingleSelection = true
@@ -75,9 +75,9 @@ class ProductActivity : AppCompatActivity() {
             }
         }
 
-
         // Submit button handler
         btnCheckout.setOnClickListener {
+            // 02-start
             lifecycleScope.launch {
                 try {
                     dialog?.show()
@@ -88,15 +88,17 @@ class ProductActivity : AppCompatActivity() {
                     e.message?.let { it1 -> displayError(it1) }
                 }
             }
+            // 02-end
         }
     }
 
     // Prepare amount success case
     private fun goToCheckout() {
+        // 03-start
         // add color and size chosen as a custom fields to be saved with the transaction
         XpayUtils.addCustomField("color", color)
         XpayUtils.addCustomField("size", size)
-
+        // 03-end
         dialog?.dismiss()
         val intent = Intent(this, UserInfoActivity::class.java)
         startActivity(intent)

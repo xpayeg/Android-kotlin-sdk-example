@@ -24,15 +24,17 @@ class PaymentPreviewActivity : AppCompatActivity() {
         setContentView(R.layout.activity_payment_preview)
         dialog = SpotsDialog.Builder().setContext(this@PaymentPreviewActivity).build()
 
-        // Display Payment info to user before submitting
+        // 01-start
         textName.text = "Name: \n${XpayUtils.billingInfo!!.name}"
         textEmail.text = "Email: \n${XpayUtils.billingInfo!!.email}"
         txtPhone.text = "Phone: \n${XpayUtils.billingInfo?.phone}"
         txtMethod.text = "Payment Method: \n${XpayUtils.payUsing}"
         totalAmount.text = "Total Amount: \n${intent.getStringExtra("TOTAL_AMOUNT")?.toDouble()}"
+        // 01-end
 
         // Confirm button method
         Confirmbtn.setOnClickListener {
+            // 02-start
             try {
                 dialog!!.show()
                 GlobalScope.launch {
@@ -43,6 +45,7 @@ class PaymentPreviewActivity : AppCompatActivity() {
                 dialog?.dismiss()
                 e.message?.let { it1 -> Toast.makeText(this, it1, Toast.LENGTH_LONG).show() }
             }
+            // 02-end
         }
 
     }
@@ -50,6 +53,7 @@ class PaymentPreviewActivity : AppCompatActivity() {
     // when Payment successful
     private fun completePayment(response: PayData) {
         dialog?.dismiss()
+        // 03-start
         if (response.iframe_url != null) {
             // if iframe_url inside the returned response is not null, launch a web view to display the payment form
             isCardPayment = true
@@ -69,16 +73,19 @@ class PaymentPreviewActivity : AppCompatActivity() {
             intent.putExtra("MESSAGE", response.message)
             startActivity(intent)
         }
+        // 03-end
     }
 
     // method to handle web view dismiss case
     // when the user dismisses the web view then navigate to transaction activity which shows him the transaction info
     override fun onRestart() {
         super.onRestart()
+        // 04-start
         if (isCardPayment) {
             val intent = Intent(this, TransactionActivity::class.java)
             intent.putExtra("UUID", uuid)
             startActivity(intent)
         }
+        // 04-end
     }
 }
