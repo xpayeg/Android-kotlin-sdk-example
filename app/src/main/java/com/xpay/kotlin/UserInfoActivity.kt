@@ -1,15 +1,19 @@
 package com.xpay.kotlin
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.xpay.kotlinutils.XpayUtils
+import com.xpay.kotlinutils.models.BillingInfo
 import com.xpay.kotlinutils.models.PaymentMethods
+import com.xpay.kotlinutils.models.ShippingInfo
 import kotlinx.android.synthetic.main.activity_user_info.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -74,14 +78,64 @@ class UserInfoActivity : AppCompatActivity() {
             override fun onNothingSelected(parentView: AdapterView<*>?) {}
         }
         // 03-start
+        // get the value of countries-cities combinations from assets
+        val jsonFileString = getJsonDataFromAsset(applicationContext, "countries.json")
+        val obj = JSONObject(jsonFileString!!)
 
+        val countriesList = populateCountries(obj)
         // 03-end
+        sp_country.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(
+                parentView: AdapterView<*>?,
+                selectedItemView: View?,
+                position: Int,
+                id: Long
+            ) {
+                // 04-start
+                populateStates(obj, countriesList[position])
+                // 04-end
+            }
+
+            override fun onNothingSelected(parentView: AdapterView<*>?) {}
+        }
         // submit button method
         btnSubmit.setOnClickListener {
             // validate shipping info(in case cash collection method is selected)
-            // 04-start
+            // 05-start
+            var validShippingInfo: Boolean = true
+            if (constraint_shipping.visibility == View.VISIBLE) {
+                if (validateShippingInfo()) {
+                    validShippingInfo = true
+                    // set payment shipping info
+                    XpayUtils.ShippingInfo = ShippingInfo(
+                        "EG",
+                        sp_state.selectedItem.toString(),
+                        sp_country.selectedItem.toString(),
+                        et_apartment.text.toString(),
+                        et_building.text.toString(),
+                        et_floor.text.toString(),
+                        et_street.text.toString()
+                    )
+                } else validShippingInfo = false
+            }
 
-            // 04-end
+            if (validateBillingInfo() && validShippingInfo) {
+// set payment billing info
+                try {
+                    XpayUtils.billingInfo =
+                        BillingInfo(
+                            userName.text.toString(),
+                            userEmail.text.toString(),
+                            "+2${userPhone.text}"
+                        )
+                    val intent = Intent(this, PaymentPreviewActivity::class.java)
+                    intent.putExtra("TOTAL_AMOUNT", totalAmount.toString())
+                    startActivity(intent)
+                } catch (e: Exception) {
+                    e.message?.let { it1 -> Toast.makeText(this, it1, Toast.LENGTH_LONG).show() }
+                }
+            }
+            // 05-end
         }
     }
 

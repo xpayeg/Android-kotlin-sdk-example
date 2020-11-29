@@ -7,9 +7,12 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
+import com.xpay.kotlinutils.XpayUtils
 import com.xpay.kotlinutils.models.api.transaction.TransactionData
 import dmax.dialog.SpotsDialog
 import kotlinx.android.synthetic.main.activity_transaction.*
+import kotlinx.coroutines.launch
 
 class TransactionActivity : AppCompatActivity() {
     var dialog: AlertDialog? = null
@@ -30,9 +33,20 @@ class TransactionActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadTransaction(Uid: String) {
+    private fun loadTransaction(Uuid: String) {
         // 02-start
-
+        lifecycleScope.launch {
+            try {
+                dialog?.show()
+                Uuid.let { it ->
+                    val res = XpayUtils.getTransaction(it)
+                    res?.let { updateTransaction(res) }
+                }
+            } catch (e: Exception) {
+                dialog?.dismiss()
+                e.message?.let { displayError(e.message.toString()) }
+            }
+        }
         // 02-end
     }
 
@@ -40,7 +54,8 @@ class TransactionActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         // 01-start
-
+        uuid = intent.getStringExtra("UUID")
+        uuid?.let { loadTransaction(it) }
         // 01-end
     }
 

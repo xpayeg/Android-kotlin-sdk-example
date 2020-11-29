@@ -24,9 +24,9 @@ class ProductActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         // 01-start
         // set XpayUtils core settings
-        XpayUtils.apiKey = "3uBD5mrj.3HSCm46V7xJ5yfIkPb2gBOIUFH4Ks0Ss"
-        XpayUtils.communityId = "zogDmQW"
-        XpayUtils.apiPaymentId = 18
+        XpayUtils.apiKey = "Cce74Y3B.J0P4tItq7hGu2ddhCB0WF5ND1eTubkpT"
+        XpayUtils.communityId = "m2J7eBK"
+        XpayUtils.apiPaymentId = 60
         // 01-end
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product)
