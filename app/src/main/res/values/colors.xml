@@ -8,9 +8,6 @@
     <color name="my_yellow">#FFC107</color>
     <color name="dark_gray">#838383</color>
 
-    <color name="trans_successs">#D3FFE0</color>
-    <color name="trans_failed">#FFCACE</color>
-    <color name="trans_pending">#F0F0F0</color>
     <!--color palete-->
     <color name="white">#dde6ec</color>
     <color name="blue">#7ec4ed</color>
