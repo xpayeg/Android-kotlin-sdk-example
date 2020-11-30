@@ -28,20 +28,7 @@ class UserInfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_info)
         //  01-start
-        // Populate paymentMethodsDropdown with available active payment methods
-        val paymentMethodsAdapter: ArrayAdapter<String>?
-        val paymentMethodsList: MutableList<String> = mutableListOf()
-        // get the available active payment methods and convert it to List<String>
-        for (paymentMethod in XpayUtils.activePaymentMethods) {
-            paymentMethodsList.add(paymentMethod.toString())
-        }
-        paymentMethodsAdapter = paymentMethodsList.distinct().toList().let {
-            ArrayAdapter(
-                this, android.R.layout.simple_spinner_item, it
-            )
-        }
-        paymentMethodsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        paymentMethodsDropdown.adapter = paymentMethodsAdapter
+
         //  01-end
         // set actual amount for different payment methods
         paymentMethodsDropdown.onItemSelectedListener = object : OnItemSelectedListener {
@@ -53,36 +40,13 @@ class UserInfoActivity : AppCompatActivity() {
             ) {
                 // 02-start
 
-                when (XpayUtils.activePaymentMethods[position]) {
-                    PaymentMethods.CASH -> {
-                        totalAmount = XpayUtils.PaymentOptionsTotalAmounts?.cash!!
-                        XpayUtils.payUsing = PaymentMethods.CASH
-                        showView(constraint_shipping)
-                    }
-                    PaymentMethods.CARD -> {
-                        totalAmount = XpayUtils.PaymentOptionsTotalAmounts?.card!!
-                        XpayUtils.payUsing = PaymentMethods.CARD
-                        hideView(constraint_shipping)
-                    }
-                    PaymentMethods.KIOSK -> {
-                        totalAmount = XpayUtils.PaymentOptionsTotalAmounts?.kiosk!!
-                        XpayUtils.payUsing = PaymentMethods.KIOSK
-                        hideView(constraint_shipping)
-                    }
-                }
-                totalAmount = String.format("%.2f", totalAmount).toDouble()
-                totalAmountTxt.text = "Total Amount: ${totalAmount} Egp"
                 // 02-end
             }
 
             override fun onNothingSelected(parentView: AdapterView<*>?) {}
         }
         // 03-start
-        // get the value of countries-cities combinations from assets
-        val jsonFileString = getJsonDataFromAsset(applicationContext, "countries.json")
-        val obj = JSONObject(jsonFileString!!)
 
-        val countriesList = populateCountries(obj)
         // 03-end
         sp_country.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(
@@ -92,7 +56,7 @@ class UserInfoActivity : AppCompatActivity() {
                 id: Long
             ) {
                 // 04-start
-                populateStates(obj, countriesList[position])
+
                 // 04-end
             }
 
@@ -102,39 +66,7 @@ class UserInfoActivity : AppCompatActivity() {
         btnSubmit.setOnClickListener {
             // validate shipping info(in case cash collection method is selected)
             // 05-start
-            var validShippingInfo: Boolean = true
-            if (constraint_shipping.visibility == View.VISIBLE) {
-                if (validateShippingInfo()) {
-                    validShippingInfo = true
-                    // set payment shipping info
-                    XpayUtils.ShippingInfo = ShippingInfo(
-                        "EG",
-                        sp_state.selectedItem.toString(),
-                        sp_country.selectedItem.toString(),
-                        et_apartment.text.toString(),
-                        et_building.text.toString(),
-                        et_floor.text.toString(),
-                        et_street.text.toString()
-                    )
-                } else validShippingInfo = false
-            }
 
-            if (validateBillingInfo() && validShippingInfo) {
-// set payment billing info
-                try {
-                    XpayUtils.billingInfo =
-                        BillingInfo(
-                            userName.text.toString(),
-                            userEmail.text.toString(),
-                            "+2${userPhone.text}"
-                        )
-                    val intent = Intent(this, PaymentPreviewActivity::class.java)
-                    intent.putExtra("TOTAL_AMOUNT", totalAmount.toString())
-                    startActivity(intent)
-                } catch (e: Exception) {
-                    e.message?.let { it1 -> Toast.makeText(this, it1, Toast.LENGTH_LONG).show() }
-                }
-            }
             // 05-end
         }
     }
