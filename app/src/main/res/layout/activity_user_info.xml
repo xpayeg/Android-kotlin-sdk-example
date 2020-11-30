@@ -6,26 +6,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    tools:context=".UserActivity">
+    tools:context=".UserInfoActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/userName2"
+            android:id="@+id/userName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:layout_marginTop="28dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:background="@drawable/background_border"
             android:ems="6"
             android:hint="Enter Full Name"
             android:inputType="textPersonName"
             android:padding="12dp"
+            android:text="John doe"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -36,35 +35,36 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:background="@drawable/background_border"
             android:ems="6"
             android:hint="Enter Email"
             android:inputType="textEmailAddress"
             android:padding="12dp"
+            android:text="J.doe@test.com"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userName2" />
+            app:layout_constraintTop_toBottomOf="@+id/userName" />
 
         <EditText
             android:id="@+id/userPhone"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:background="@drawable/background_border"
             android:ems="6"
             android:hint="Enter Phone Number"
             android:imeOptions="actionDone"
             android:inputType="phone"
-            android:padding="12dp"
+            android:paddingLeft="45dp"
+            android:paddingTop="12dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="12dp"
+            android:text="01111111111"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -86,7 +86,7 @@
             app:layout_constraintEnd_toEndOf="parent" />
 
         <Spinner
-            android:id="@+id/spinner"
+            android:id="@+id/paymentMethodsDropdown"
             style="@style/Widget.AppCompat.Spinner.Underlined"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -118,8 +118,8 @@
             android:text="Total Amount: 458 Egp"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/spinner"
-            app:layout_constraintTop_toBottomOf="@+id/spinner" />
+            app:layout_constraintStart_toStartOf="@+id/paymentMethodsDropdown"
+            app:layout_constraintTop_toBottomOf="@+id/paymentMethodsDropdown" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint_shipping"
@@ -128,7 +128,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:background="#F3F3F3"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/btnSubmit"
             app:layout_constraintTop_toBottomOf="@+id/totalAmountTxt">
 
@@ -192,7 +192,6 @@
                         android:layout_marginRight="16dp"
                         android:layout_weight="1"
                         android:background="@drawable/background_border"
-                        android:entries="@array/countries"
                         android:padding="12dp"
                         android:spinnerMode="dialog" />
 
@@ -266,6 +265,22 @@
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_margin="1dp"
+            android:background="@drawable/be_code"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="8dp"
+            android:text="+2"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/userPhone"
+            app:layout_constraintStart_toStartOf="@+id/userPhone"
+            app:layout_constraintTop_toTopOf="@+id/userPhone"
+            app:layout_constraintVertical_bias="0.655" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
